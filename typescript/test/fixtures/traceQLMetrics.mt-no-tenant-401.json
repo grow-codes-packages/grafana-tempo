@@ -1,0 +1,17 @@
+{
+  "function": "traceQLMetrics",
+  "case": "mt-no-tenant-401",
+  "request": {
+    "method": "GET",
+    "path": "/api/metrics/query_range",
+    "query": {
+      "q": "{} | count_over_time()",
+      "since": "5m"
+    }
+  },
+  "response": {
+    "status": 401,
+    "contentType": "text/plain; charset=utf-8",
+    "body": "no org id\n"
+  }
+}

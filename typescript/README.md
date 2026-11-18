@@ -1,6 +1,8 @@
-# @grow-codes/**KEY**
+# @grow-codes/grafana-tempo
 
-TypeScript SDK for [**DISPLAY**](https://grow-codes-packages.github.io/grafana-tempo/) by Grow Codes.
+TypeScript SDK for [Grafana Tempo](https://grow-codes-packages.github.io/grafana-tempo/) by Grow Codes:
+OpenTelemetry tracing with the Tempo OTLP preset (`initTracing`), the Tempo query API
+(`getTrace`, TraceQL `search`, tags, TraceQL metrics) and a TraceQL builder.
 Node.js 22.12 or newer, ESM and CommonJS, full type definitions.
 
 ```sh
@@ -8,14 +10,22 @@ npm install @grow-codes/grafana-tempo
 ```
 
 ```ts
-import { TempoClient } from "@grow-codes/grafana-tempo";
+import { TempoClient, TraceQL, initTracing, withSpan } from "@grow-codes/grafana-tempo";
 
-// Reads GROW_GRAFANA_TEMPO_URL, GROW_GRAFANA_TEMPO_TOKEN, timeouts, TLS and proxy settings.
+// OTLP/HTTP protobuf to GROW_GRAFANA_TEMPO_OTLP_ENDPOINT / OTEL_EXPORTER_OTLP_* (default :4318).
+const tracing = initTracing({ serviceName: "checkout", tenantId: "team-a" });
+await withSpan("checkout", async () => chargeCard());
+
+// Query API: GROW_GRAFANA_TEMPO_URL (or TEMPO_URL), tenant GROW_GRAFANA_TEMPO_TENANT_ID.
 const client = TempoClient.fromEnv();
 try {
-  console.log(await client.health()); // { healthy: true, status: "ok", details: {} }
-  console.log(`ping: ${(await client.ping()).toFixed(1)} ms`);
+  const trace = await client.query.getTrace("5b8efff798038103d269b633813fc60c");
+  const hits = await client.query.search({
+    traceql: TraceQL.span({ "resource.service.name": "checkout" }).and("duration", ">", "200ms"),
+    limit: 10,
+  });
 } finally {
+  await tracing.shutdown();
   await client.close();
 }
 ```
@@ -28,4 +38,4 @@ Test helpers (in-memory fakes and the conformance runner) live in
 `@grow-codes/grafana-tempo/testing`.
 
 Documentation: https://grow-codes-packages.github.io/grafana-tempo/ · Licence: Apache-2.0.
-**DISPLAY** is a trademark of **VENDOR**; this package is not affiliated with or endorsed by it.
+Grafana Tempo is a trademark of Grafana Labs; this package is not affiliated with or endorsed by it.

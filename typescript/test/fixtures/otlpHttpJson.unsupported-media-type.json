@@ -1,0 +1,17 @@
+{
+  "function": "otlpHttpJson",
+  "case": "unsupported-media-type",
+  "request": {
+    "method": "POST",
+    "path": "/v1/traces",
+    "headers": {
+      "Content-Type": "text/plain"
+    },
+    "body": "<bytes>"
+  },
+  "response": {
+    "status": 415,
+    "contentType": "text/plain",
+    "body": "415 unsupported media type, supported: [application/json, application/x-protobuf]"
+  }
+}

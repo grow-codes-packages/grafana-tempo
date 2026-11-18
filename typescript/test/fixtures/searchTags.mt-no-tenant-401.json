@@ -1,0 +1,13 @@
+{
+  "function": "searchTags",
+  "case": "mt-no-tenant-401",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/search/tags"
+  },
+  "response": {
+    "status": 401,
+    "contentType": "text/plain; charset=utf-8",
+    "body": "no org id\n"
+  }
+}

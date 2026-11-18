@@ -1,0 +1,89 @@
+{
+  "function": "traceQLMetrics",
+  "case": "rate-since",
+  "request": {
+    "method": "GET",
+    "path": "/api/metrics/query_range",
+    "query": {
+      "q": "{ resource.service.name = \"grow-sdk-verify-179503498127460-api\" } | rate()",
+      "since": "15m"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "series": [
+        {
+          "labels": [
+            {
+              "key": "__name__",
+              "value": {
+                "stringValue": "rate"
+              }
+            }
+          ],
+          "samples": [
+            {
+              "timestampMs": "1795034139000"
+            },
+            {
+              "timestampMs": "1795034142000"
+            },
+            {
+              "timestampMs": "1795034145000"
+            },
+            {
+              "timestampMs": "1795034148000"
+            },
+            "…trimmed 287 more"
+          ],
+          "exemplars": [
+            {
+              "labels": [
+                {
+                  "key": "trace:id",
+                  "value": {
+                    "stringValue": "f74bc1b058a1a8b85f9ae0231e4001"
+                  }
+                },
+                {
+                  "key": "resource.service.name",
+                  "value": {
+                    "stringValue": "grow-sdk-verify-179503498127460-api"
+                  }
+                }
+              ],
+              "value": 0.6666666666666666,
+              "timestampMs": "1795035005729"
+            },
+            {
+              "labels": [
+                {
+                  "key": "trace:id",
+                  "value": {
+                    "stringValue": "e9b7d20a606bce1c1c3f347ef020c799"
+                  }
+                },
+                {
+                  "key": "resource.service.name",
+                  "value": {
+                    "stringValue": "grow-sdk-verify-179503498127460-api"
+                  }
+                }
+              ],
+              "value": 0.6666666666666666,
+              "timestampMs": "1795035006729"
+            }
+          ]
+        }
+      ],
+      "metrics": {
+        "inspectedBytes": "27015",
+        "completedJobs": 1,
+        "totalJobs": 1
+      },
+      "step": "3000000000"
+    }
+  }
+}

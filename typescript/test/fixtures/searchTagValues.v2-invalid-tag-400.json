@@ -1,0 +1,17 @@
+{
+  "function": "searchTagValues",
+  "case": "v2-invalid-tag-400",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/search/tag/%7Bbad/values",
+    "query": {
+      "start": "1795034947",
+      "end": "1795035067"
+    }
+  },
+  "response": {
+    "status": 400,
+    "contentType": "text/plain; charset=utf-8",
+    "body": "please provide a valid tagName: failed to parse identifier {bad: parse error at line 1, col 2: syntax error: unexpected {"
+  }
+}

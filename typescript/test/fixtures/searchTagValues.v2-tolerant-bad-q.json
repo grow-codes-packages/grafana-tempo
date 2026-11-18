@@ -1,0 +1,48 @@
+{
+  "function": "searchTagValues",
+  "case": "v2-tolerant-bad-q",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/search/tag/resource.service.name/values",
+    "query": {
+      "start": "1795034947",
+      "end": "1795035067",
+      "q": "{ bad"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "tagValues": [
+        {
+          "type": "string",
+          "value": "grow-sdk-seed-db"
+        },
+        {
+          "type": "string",
+          "value": "grow-sdk-tg-httppb-179503498127460"
+        },
+        {
+          "type": "string",
+          "value": "grow-sdk-tg-grpc-179503498127460"
+        },
+        {
+          "type": "string",
+          "value": "grow-sdk-verify-179503498127460-api"
+        },
+        {
+          "type": "string",
+          "value": "grow-sdk-verify-179503498127460-db"
+        },
+        {
+          "type": "string",
+          "value": "grow-sdk-seed-api"
+        }
+      ],
+      "metrics": {
+        "inspectedBytes": "26525"
+      }
+    }
+  }
+}

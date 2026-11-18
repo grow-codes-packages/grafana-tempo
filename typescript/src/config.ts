@@ -9,15 +9,12 @@ import {
   EnvReader,
   type Hooks,
   type ClientLogger,
-  REDACTED,
   type RetryPolicy,
-  Secret,
   type TlsOptions,
   describeCommonConfig,
   mergeOptions,
   readCommonEnv,
   resolveCommonConfig,
-  secretValues,
   validateCommonConfig,
 } from "./core/index.js";
 
@@ -26,24 +23,51 @@ const INSPECT = Symbol.for("nodejs.util.inspect.custom");
 /** Port text from the stack catalog; the default URL uses its first number. */
 const CATALOG_PORT = "3200";
 
+/** Header that selects the tenant on a multi-tenant Tempo (query and OTLP ingest). */
+export const TENANT_HEADER = "X-Scope-OrgID";
+
+/**
+ * Characters Tempo accepts in a tenant id (Cortex rules). `|` joins several tenants for a
+ * federated query (`tenant-b|tenant-a`).
+ */
+const TENANT_PATTERN = /^[A-Za-z0-9!\-_.*'()|]{1,150}$/;
+
 /** Options accepted by {@link TempoConfig} (all optional). */
 export interface TempoConfigOptions extends CommonConfigOptions {
-  /** API token sent as `Authorization: Bearer <token>` (env `GROW_GRAFANA_TEMPO_TOKEN`). */
-  token?: string | Secret;
+  /**
+   * Tenant sent as `X-Scope-OrgID` on every query call (env `GROW_GRAFANA_TEMPO_TENANT_ID`, then
+   * `TEMPO_TENANT_ID`). Required when Tempo runs with `multitenancy_enabled: true`; ignored by a
+   * single-tenant Tempo. Several tenants joined with `|` run a federated query.
+   */
+  tenantId?: string;
 }
 
 /**
- * Vendor environment variables read after `GROW_GRAFANA_TEMPO_*`, in order
- * (e.g. `BAO_ADDR` then `VAULT_ADDR`). Filled in by the service.
+ * Vendor environment variables read after `GROW_GRAFANA_TEMPO_*`, in order.
  */
-export const VENDOR_ENV: CommonVendorEnv & { token: readonly string[] } = {
-  url: [],
-  token: [],
+export const VENDOR_ENV: CommonVendorEnv & { tenantId: readonly string[] } = {
+  url: ["TEMPO_URL"],
+  tenantId: ["TEMPO_TENANT_ID"],
 };
 
-/** Immutable configuration of {@link TempoClient}. */
+/** Throws {@link ConfigError} when `tenantId` is not a valid Tempo tenant id. */
+export function validateTenantId(tenantId: string | undefined, what = "tenantId"): void {
+  if (tenantId === undefined) return;
+  if (!TENANT_PATTERN.test(tenantId)) {
+    throw new ConfigError(
+      `invalid configuration: ${what} must be 1-150 characters of A-Z a-z 0-9 ! - _ . * ' ( ) |`,
+    );
+  }
+}
+
+/**
+ * Immutable configuration of {@link TempoClient} (query API, port 3200).
+ *
+ * Tempo has no authentication of its own: put an authenticating reverse proxy in front of it
+ * and pass its credentials through `headers` (sensitive headers are redacted everywhere).
+ */
 export class TempoConfig implements CommonConfig {
-  /** Default endpoint. */
+  /** Default endpoint of the query API. */
   static readonly DEFAULT_URL = `http://127.0.0.1:${/\d+/.exec(CATALOG_PORT)?.[0] ?? "8080"}`;
   /** Prefix of every environment variable. */
   static readonly ENV_PREFIX = "GROW_GRAFANA_TEMPO_";
@@ -59,8 +83,8 @@ export class TempoConfig implements CommonConfig {
   readonly userAgentSuffix?: string;
   readonly hooks?: Hooks;
   readonly logger?: ClientLogger;
-  /** API token. */
-  readonly token?: Secret;
+  /** Tenant sent as `X-Scope-OrgID`, or undefined (no header). */
+  readonly tenantId?: string;
 
   /** Applies defaults, validates (throws {@link ConfigError}) and freezes. */
   constructor(options: TempoConfigOptions = {}) {
@@ -76,8 +100,7 @@ export class TempoConfig implements CommonConfig {
     if (common.userAgentSuffix !== undefined) this.userAgentSuffix = common.userAgentSuffix;
     if (common.hooks !== undefined) this.hooks = common.hooks;
     if (common.logger !== undefined) this.logger = common.logger;
-    const token = Secret.from(options.token);
-    if (token !== undefined) this.token = token;
+    if (options.tenantId !== undefined) this.tenantId = options.tenantId;
     this.validate();
     Object.freeze(this);
   }
@@ -90,32 +113,37 @@ export class TempoConfig implements CommonConfig {
 
   /**
    * Builds a config from the environment. Precedence: explicit `overrides` >
-   * `GROW_GRAFANA_TEMPO_<NAME>` > vendor variables ({@link VENDOR_ENV}) > defaults.
+   * `GROW_GRAFANA_TEMPO_<NAME>` > vendor variables ({@link VENDOR_ENV}: `TEMPO_URL`,
+   * `TEMPO_TENANT_ID`) > defaults.
    */
-  static fromEnv(overrides: TempoConfigOptions = {}, env: EnvMap = process.env) {
+  static fromEnv(overrides: TempoConfigOptions = {}, env: EnvMap = process.env): TempoConfig {
     const reader = new EnvReader(TempoConfig.ENV_PREFIX, env);
     const fromEnv: TempoConfigOptions = readCommonEnv(reader, VENDOR_ENV);
-    const token = reader.secret("TOKEN", VENDOR_ENV.token);
-    if (token !== undefined) fromEnv.token = token;
+    const tenantId = reader.string("TENANT_ID", VENDOR_ENV.tenantId);
+    if (tenantId !== undefined) fromEnv.tenantId = tenantId;
     const merged = mergeOptions<TempoConfigOptions>(fromEnv, overrides);
     return new TempoConfig(merged);
   }
 
-  /** Throws {@link ConfigError} when a setting is invalid. Service rules go here. */
+  /** Throws {@link ConfigError} when a setting is invalid. */
   validate(): void {
     validateCommonConfig(this);
-    if (this.token?.reveal().trim() === "")
-      throw new ConfigError("invalid configuration: token must not be blank");
+    validateTenantId(this.tenantId);
   }
 
-  /** Credential values to redact from error messages and logs. */
+  /** Credential values to redact from error messages and logs (Tempo has none of its own). */
   knownSecrets(): string[] {
-    return secretValues(this.token);
+    return [];
+  }
+
+  /** Headers added to every query call (`X-Scope-OrgID` when a tenant is set). */
+  tenantHeaders(): Record<string, string> {
+    return this.tenantId === undefined ? {} : { [TENANT_HEADER]: this.tenantId };
   }
 
   /** Debug form with every credential redacted. */
   toJSON(): Record<string, unknown> {
-    return { ...describeCommonConfig(this), token: this.token === undefined ? null : REDACTED };
+    return { ...describeCommonConfig(this), tenantId: this.tenantId ?? null };
   }
 
   toString(): string {
