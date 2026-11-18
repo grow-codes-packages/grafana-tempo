@@ -180,21 +180,6 @@
       "generated": true
     },
     {
-      "path": "docker/Dockerfile.java",
-      "sha256": "d2f73517e2fc2b01766de961d400187cc3cf7dae8e54f95613d5c95d69d0be6c",
-      "generated": true
-    },
-    {
-      "path": "docker/Dockerfile.python",
-      "sha256": "4d84e6e28575ae08fa7cc872bb1f3bdbecc2d5c03eddc6bd4c002a91d3474e78",
-      "generated": true
-    },
-    {
-      "path": "docker/Dockerfile.rust",
-      "sha256": "fdf90fcb83b62b16ba67492678c2d047d2db0b2f5d0062604460e5b1edbeeb6a",
-      "generated": true
-    },
-    {
       "path": "docker/Dockerfile.typescript",
       "sha256": "c665cac9b7a729fc6dc0fee53ce7a0e81606e4ebbae3c6f2cb9c861134a33971",
       "generated": true
@@ -352,66 +337,6 @@
     {
       "path": "examples/go/main.go",
       "sha256": "89cf9f37afaa898d3a28b1af5d2a9a7e48ada8abfec9939e40f3107ffa0f33a4",
-      "generated": false
-    },
-    {
-      "path": "examples/java/README.md",
-      "sha256": "febd16bd12765e9ade254480fe943cdd94589c3e6264c99e75fc54ac8ebec5bc",
-      "generated": false
-    },
-    {
-      "path": "examples/java/pom.xml",
-      "sha256": "0e5adbed8cc122ff2055237524ebe68cf26edf2f5f98c69e7c739a72de34182a",
-      "generated": false
-    },
-    {
-      "path": "examples/java/src/main/java/codes/grow/packages/tempo/examples/AsyncExample.java",
-      "sha256": "49399a032c44faeac34eb9a5656770ebf33232743f54d389cc07c08527867dcc",
-      "generated": false
-    },
-    {
-      "path": "examples/java/src/main/java/codes/grow/packages/tempo/examples/BasicExample.java",
-      "sha256": "af3efaa5cdaffc4d4e59cb29f5f693ea55faca2da402447c633de526b7aa09e5",
-      "generated": false
-    },
-    {
-      "path": "examples/java/src/main/java/codes/grow/packages/tempo/examples/HooksAndLoggingExample.java",
-      "sha256": "ab5a0df7ea3c494dc7955b0a82ac3bdeb2f4bc94be5184575bb1962ef09a9053",
-      "generated": false
-    },
-    {
-      "path": "examples/python/README.md",
-      "sha256": "411a4194981b410ace8ea683046d221518d0f63a1193b6171c77fc047c9aa685",
-      "generated": false
-    },
-    {
-      "path": "examples/python/async_basic.py",
-      "sha256": "d61629737fe673382ff5e5e23e05d7f0a3987c878e617f869b8b8a0d4455ddf1",
-      "generated": false
-    },
-    {
-      "path": "examples/python/basic.py",
-      "sha256": "60164461a70bfdb8653f1b588ba21b9d2bb0784ad7a9ae04f7ffca07d7abf44f",
-      "generated": false
-    },
-    {
-      "path": "examples/python/hooks_and_logging.py",
-      "sha256": "6c63a51c9c7e64ae95fe13812675e95ca9408d8b9a952f76c241ec61ffb0ac01",
-      "generated": false
-    },
-    {
-      "path": "examples/rust/.gitignore",
-      "sha256": "9cc2c8cc102e0b2a0a177c8f594abc9b9776300a04473c24b45d52c1007a4119",
-      "generated": false
-    },
-    {
-      "path": "examples/rust/Cargo.toml",
-      "sha256": "6541aa836c2397c9dfe8eddb586db62b5f3d99a9ebdce3f7e66becff2c1921a9",
-      "generated": false
-    },
-    {
-      "path": "examples/rust/src/main.rs",
-      "sha256": "3e08667cf278ca9adb7e266c0773955b22781f883ea087414e5126477e6171a5",
       "generated": false
     },
     {
@@ -657,6 +582,706 @@
     {
       "path": "go/version.go",
       "sha256": "5a9632a4d8585f538625b72388fffd0f591a5228eca2595f518d4cb1d39d3cd1",
+      "generated": false
+    },
+    {
+      "path": "mkdocs.yml",
+      "sha256": "ddddf35bf10163fd3cb24e6efa51b09fd865fd9980ed38d0a762ce484b043955",
+      "generated": false
+    },
+    {
+      "path": "release-please-config.json",
+      "sha256": "77cdef30a16270ef46511664797ebcacdcef8430101628afd1ce099725e7fa50",
+      "generated": false
+    },
+    {
+      "path": "skills/grafana-tempo-sdk/SKILL.md",
+      "sha256": "446e3fb1df27a79b9dda4fb89562d9fcd5f28fad73a8e2001f115312b1b78e91",
+      "generated": false
+    },
+    {
+      "path": "typescript/.gitignore",
+      "sha256": "5c1047c750a2666a14d7f1a008f8a2fdc83919fef915293bcff36b44dedc1071",
+      "generated": false
+    },
+    {
+      "path": "typescript/.prettierignore",
+      "sha256": "213e9f826f00551adae35eba3e3877d93666f7626e3358d1392bcea95bdf3fdb",
+      "generated": true
+    },
+    {
+      "path": "typescript/.prettierrc.json",
+      "sha256": "ac5868af5fec64d1f0285340fd1b9f3536e387a9bd626d9e87ff6fb1098905b1",
+      "generated": false
+    },
+    {
+      "path": "typescript/Makefile",
+      "sha256": "0f6a79ff9f891acb7ecd8133a1851bf52c730ab78d39acec6177f9694faee073",
+      "generated": false
+    },
+    {
+      "path": "typescript/README.md",
+      "sha256": "63e6a7fec0f1d5f02ec96b61b15fbbfa392c8a472750878cb3700ee78d6d0fa8",
+      "generated": false
+    },
+    {
+      "path": "typescript/eslint.config.js",
+      "sha256": "39ab9ba36449e42f05aab17a484ca8b4114aaef220f313ada66a107351b75eb5",
+      "generated": false
+    },
+    {
+      "path": "typescript/integration/README.md",
+      "sha256": "89e1a54ddcc741a410121316a9ffb8f1aa99ddc59ce296b9bfe2ef70d673e5e9",
+      "generated": false
+    },
+    {
+      "path": "typescript/integration/package.json",
+      "sha256": "196762c09196527c6d105ed43c7d7b3846f7bf5b2bc4bece12b0e30e78442d20",
+      "generated": false
+    },
+    {
+      "path": "typescript/integration/test/client.test.ts",
+      "sha256": "f3e2a4e3709a7ede9bd406d21fc0f8be056eb854c7bf730f7701f046dd18c773",
+      "generated": false
+    },
+    {
+      "path": "typescript/integration/test/conformance.test.ts",
+      "sha256": "c51d87a4c391d6a8c226adcf340a0a8878a70bba4c9da941afeba9b5211d01c7",
+      "generated": false
+    },
+    {
+      "path": "typescript/integration/test/env.ts",
+      "sha256": "4d01e4976c06fa4be83c9c9d24882c97a2be99e8ff4edcfdfd8db20a9e33a06f",
+      "generated": false
+    },
+    {
+      "path": "typescript/package.json",
+      "sha256": "bda3c05d8681f9882beef41ad469ef64b2dabf4195b9387c50eab39351a34be2",
+      "generated": false
+    },
+    {
+      "path": "typescript/scripts/coverage-summary.mjs",
+      "sha256": "e2a9958208d11b3d875b65b46d2d469ddb7cd4de50d8881f948680285852c296",
+      "generated": false
+    },
+    {
+      "path": "typescript/scripts/license-check.mjs",
+      "sha256": "4bffff0bf732c4490d51d3b2409b11973e4a28400d16433831748d4067e3fe04",
+      "generated": false
+    },
+    {
+      "path": "typescript/src/client.ts",
+      "sha256": "defdd0843d0904f52e2d3ca7e990cd2e40d0f77b2cb39e34f95216147001ba10",
+      "generated": false
+    },
+    {
+      "path": "typescript/src/config.ts",
+      "sha256": "b314832aad074f22233508aa3e90b9af43903c3c1b2d2965630acfb3f7e6a7fe",
+      "generated": false
+    },
+    {
+      "path": "typescript/src/core/abort.ts",
+      "sha256": "34f1f2093daa6c819c617b8ad9c103bdb0031e5ce4a390015518500e8b9a2c7f",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/core/env.ts",
+      "sha256": "1c3a42c80b5a5baf50f2d64636444566aa3748b9d3130ba88c640b6914d2b09b",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/core/errors.ts",
+      "sha256": "fd05433aa437c571ed81c1119a374b96bb34a2da74604c94583e74c3b5ae821b",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/core/health.ts",
+      "sha256": "da7222f73ba391066ccff64b1d34abf6d2757762b51f4d79706e3223d47df2d7",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/core/hooks.ts",
+      "sha256": "51df6f6089e0ed54e1b292557d52d11bdb424a403a69b08e6b56a87d0d943ced",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/core/index.ts",
+      "sha256": "30b30001828e2258324f98bfb088b9ca04df9248bcc688f19f74f266ee73b1ce",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/core/options.ts",
+      "sha256": "2583818bbe16a3c3357ab5f75a88c46e5fa6c0951e701e178c41a00e2f30ca16",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/core/poll.ts",
+      "sha256": "57d00dd9588b4ebed3a7abbeafe2ad39309342a84ef6e1c770408db1180bb954",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/core/redaction.ts",
+      "sha256": "c85a186230297d7cb465d233d09dc082952ca445c1f08658f39afaf57f1348e8",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/core/retry.ts",
+      "sha256": "ff9836735d248ef415430d5b554008ceac9f3e95e0667eefc929c5bed87fd9f1",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/core/transport.ts",
+      "sha256": "fe6d5cc17c55b9f7b04839080825f1d4f0c2e9885fe5be5e55d062c34d2a8f31",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/core/version.ts",
+      "sha256": "c11e0da9ca9919de15b62e96e8fd49ea9a2f4ffd3866cec57262480479095ff1",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/index.ts",
+      "sha256": "86033601e5c9b1c0d5184fdf20e87538631228a446692664a4fbf71afe2cc725",
+      "generated": false
+    },
+    {
+      "path": "typescript/src/testing/core-ops.ts",
+      "sha256": "b5dba2e8a462d60e38b8e4f615c546f3d6da52052a2a3844bb11f932aa9ae841",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/testing/expect.ts",
+      "sha256": "adb25caaedb93ec5516ebb890d615073f86c8e469c7ff1c371668716aeb304ae",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/testing/index.ts",
+      "sha256": "9cad5dddc99c218e4e707ea0bf192b45a5ac7dfc7b205523cf2749852e8eb1ff",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/testing/memory-traces.ts",
+      "sha256": "6c0a6a26b2b2ce068b700bc8b21c0da45efb2b7ed8369689f02bab0b230f2154",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/testing/ops.ts",
+      "sha256": "2ad46ec1cce4b421ebd17d4f5d493503e54a93c56705986912e90cae86f353cd",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/testing/runner.ts",
+      "sha256": "05cb204fe5751e7f6e12be98ce97ecf5a035c846a9efc230c25334df86e31698",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/testing/tracing-ops.ts",
+      "sha256": "1a317ba62c222798015e104478775171acc87955fb95586ed8eff2698bc43cfb",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/tracing/attributes.ts",
+      "sha256": "6b32e00765b25253593ea5484f7a8102f8b1e5e31e25870f2d577fc7289100d4",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/tracing/config.ts",
+      "sha256": "cf599ed898067cb61eab4ae9a45ed6ae4f4d79e85e8e307ada7af7355d7117c9",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/tracing/express.ts",
+      "sha256": "d78e6981903feae880963086dfc5fdff1f55391d253b67983d2a284cf6a43696",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/tracing/fastify.ts",
+      "sha256": "8f55d7698a9347fef84deef7b1939548d4f0b86a5c17cf148d67dcd383f5bf74",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/tracing/fetch.ts",
+      "sha256": "869bd7e1be269c0714a6c230ec4a9671f2efa015b1ae8a15a6663240cd635248",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/tracing/helpers.ts",
+      "sha256": "7e6286f51a70d8ed76c497861743aff696418da25e19e0b712aeab9e9d49be42",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/tracing/http.ts",
+      "sha256": "75c1748d5f6896927ef3d0c0611cda650688834b285817166695e49a915fde41",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/tracing/index.ts",
+      "sha256": "dce98fc26665dddc5a875c49c2131147c2a591ca4f66befc553eb2909b0f3fd6",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/tracing/init.ts",
+      "sha256": "fc28c1b33dea41d3ca5ed5cf53f287923e71e0a8eb3a769390c086f561f9ffb9",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/tracing/model.ts",
+      "sha256": "ec0d847d082275d299790c6cb3d78e4df27f601a7346f0c9b817657d798dbaf3",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/tracing/nest.ts",
+      "sha256": "e24ef473ad187f0eeec89e0c209ee7e79d79d43483b0e64a0b57df9e15634064",
+      "generated": true
+    },
+    {
+      "path": "typescript/src/tracing/query.ts",
+      "sha256": "973eb0b9ccd5984bf137be97eef4b5ac65db339aacf09602bf0bcfe3e055329e",
+      "generated": true
+    },
+    {
+      "path": "typescript/test/client.test.ts",
+      "sha256": "c6ea4308f689986111d02dfd193bd5d476658710d2cd95b4b2092c853f591ed6",
+      "generated": false
+    },
+    {
+      "path": "typescript/test/core/env.test.ts",
+      "sha256": "78e33f0b706acbd64ad3f476c7ff40eeeb7c84f4104e9945d27a8e2bea0fd7d5",
+      "generated": false
+    },
+    {
+      "path": "typescript/test/core/errors.test.ts",
+      "sha256": "8cd0013704105e97ce494b59b0fb58351da5e5bb475445d1f9030e97928413ae",
+      "generated": false
+    },
+    {
+      "path": "typescript/test/core/misc.test.ts",
+      "sha256": "edcf09ed157a0537f59b79e14ffc5b2bba30967633c4969d6044d00ebfe470cb",
+      "generated": false
+    },
+    {
+      "path": "typescript/test/core/redaction.test.ts",
+      "sha256": "57bc7c687bab8095621a19f932b7f3de99fa52f0e88c2811a399dc5ec6d3d831",
+      "generated": false
+    },
+    {
+      "path": "typescript/test/core/retry.test.ts",
+      "sha256": "04762ec9bbc952e81efbeee6420839d4de8b1ba5ff79cd2d7d516084fb594551",
+      "generated": false
+    },
+    {
+      "path": "typescript/test/core/tls.test.ts",
+      "sha256": "351ff973bf8c2c50d53e4789c229d319e087b48c9308871c196abf7dd2a9275f",
+      "generated": false
+    },
+    {
+      "path": "typescript/test/core/transport.test.ts",
+      "sha256": "f73c48acc898ed7454e71f7b9b5b80b6e8b939aa36187ea9bc207bfdba1209dc",
+      "generated": false
+    },
+    {
+      "path": "typescript/test/helpers/logger.ts",
+      "sha256": "807994885966ea99e97e53c3f25e91631903e5843b3418c718a213f01ba18170",
+      "generated": false
+    },
+    {
+      "path": "typescript/test/helpers/server.ts",
+      "sha256": "6909848d4b8f86ea33ef9571a1443684041d011d53d12d3cf82d7d23a2941589",
+      "generated": false
+    },
+    {
+      "path": "typescript/test/testing/conformance.test.ts",
+      "sha256": "d786fce162f8dc75e1eb63bf081588083b5223f128c1219849a6fc8069ceae49",
+      "generated": false
+    },
+    {
+      "path": "typescript/test/testing/expect.test.ts",
+      "sha256": "cbe630db6313b46ed476ed4b4af20632c225fa3ba64b6e940ffa47d748386235",
+      "generated": false
+    },
+    {
+      "path": "typescript/test/testing/runner.test.ts",
+      "sha256": "a6fe2ba39234699b29a5b1e6e95f228e9cb2f79ee19c63d6a5db67a28d3d82b2",
+      "generated": false
+    },
+    {
+      "path": "typescript/test/tracing/adapters.test.ts",
+      "sha256": "16f689ae2f3e7e33475ec25aa264cc831ff0922e71dadc740df2394afcdb7255",
+      "generated": true
+    },
+    {
+      "path": "typescript/test/tracing/helpers.test.ts",
+      "sha256": "ca2ec3aadecc6d01d9326856ba4f884d3960ea086e8c5dd8d8446a3ed033cbbf",
+      "generated": true
+    },
+    {
+      "path": "typescript/test/tracing/init.test.ts",
+      "sha256": "c3e345b0ece7297ba7035f22d49818a2de885bfbd2dddd5a10508bfc39f3cc3b",
+      "generated": true
+    },
+    {
+      "path": "typescript/test/tracing/memory-conformance.test.ts",
+      "sha256": "688ff5e2adbe84bbba21be0a5795ee9d59670eadebd6b135e4ef084d8b42c538",
+      "generated": true
+    },
+    {
+      "path": "typescript/test/tracing/model.test.ts",
+      "sha256": "155648d79c9465d84b46af6dfa3426bce373899b9b31c9d365c6915e98d5332c",
+      "generated": true
+    },
+    {
+      "path": "typescript/test/tracing/schema.test.ts",
+      "sha256": "7f5859703275eef5bdecaf4067b9b27a4dd1de590f8a8118acdda0ac63414627",
+      "generated": true
+    },
+    {
+      "path": "typescript/tsconfig.json",
+      "sha256": "709f99522a3330d20362173e1beae793009ec05e0a5be4715071794376bb738f",
+      "generated": false
+    },
+    {
+      "path": "typescript/tsup.config.ts",
+      "sha256": "9a086b7b970de220f1604f52c2ecd1b5a9ee66d053fff28a5b734d50f43dfd2a",
+      "generated": false
+    },
+    {
+      "path": "typescript/typedoc.json",
+      "sha256": "90363780e59f3beb9582f71a783e2f52241b1a1dd25ed670c4fdde9894d4abad",
+      "generated": false
+    },
+    {
+      "path": "typescript/vitest.config.ts",
+      "sha256": "343308680b40890a23a58cf621145ee788fa613b23f3dec3a02e565cd47b0b8f",
+      "generated": false
+    },
+    {
+      "path": "docker/Dockerfile.python",
+      "sha256": "4d84e6e28575ae08fa7cc872bb1f3bdbecc2d5c03eddc6bd4c002a91d3474e78",
+      "generated": true
+    },
+    {
+      "path": "examples/python/README.md",
+      "sha256": "411a4194981b410ace8ea683046d221518d0f63a1193b6171c77fc047c9aa685",
+      "generated": false
+    },
+    {
+      "path": "examples/python/async_basic.py",
+      "sha256": "d61629737fe673382ff5e5e23e05d7f0a3987c878e617f869b8b8a0d4455ddf1",
+      "generated": false
+    },
+    {
+      "path": "examples/python/basic.py",
+      "sha256": "60164461a70bfdb8653f1b588ba21b9d2bb0784ad7a9ae04f7ffca07d7abf44f",
+      "generated": false
+    },
+    {
+      "path": "examples/python/hooks_and_logging.py",
+      "sha256": "6c63a51c9c7e64ae95fe13812675e95ca9408d8b9a952f76c241ec61ffb0ac01",
+      "generated": false
+    },
+    {
+      "path": "python/.gitignore",
+      "sha256": "01f3f0fd19ef34925f75f5b0b0f3722e2d23f64cc8d042d784e8fb542a2f8fea",
+      "generated": false
+    },
+    {
+      "path": "python/Makefile",
+      "sha256": "96eee533c6bed81bd5972387b5189d2eef62e3c3cf09d7f161f890e376f284a1",
+      "generated": false
+    },
+    {
+      "path": "python/README.md",
+      "sha256": "35c10161a638703c26d67966ea849531f9b00c5d5f67ce62f3206e0fe732be09",
+      "generated": false
+    },
+    {
+      "path": "python/docs/index.md",
+      "sha256": "e38699e2a61d8bc00eccedb8fe4518e9b12eab0f4d088394c7ddfe11da7fd02a",
+      "generated": false
+    },
+    {
+      "path": "python/integration/conftest.py",
+      "sha256": "2d0dea0e780df4d0249535a299f57c37a467e5c18decbc1fbf5dc7244c69c9d6",
+      "generated": false
+    },
+    {
+      "path": "python/integration/factories.py",
+      "sha256": "bfea7825929356ea070bb18908c0b176ac039340a46ef6572a372d1c7ead9c19",
+      "generated": false
+    },
+    {
+      "path": "python/integration/pytest.ini",
+      "sha256": "33d992dffbeecbf614fc846a9eb74fae61ac98c142a9b331534d796f3820dcc1",
+      "generated": false
+    },
+    {
+      "path": "python/integration/requirements.txt",
+      "sha256": "ce85c94bb91bcc689bc6c4e47205545eeddce754a853fc5301b7092f29dcef34",
+      "generated": false
+    },
+    {
+      "path": "python/integration/test_core.py",
+      "sha256": "087573bb27189d4e8a029c491427a67c2b91a0939b21e4c276c5a116502b80bb",
+      "generated": false
+    },
+    {
+      "path": "python/mkdocs.yml",
+      "sha256": "224f02963effae70a7ffc060136848d7d0d0fe8315fafae1304d07645d4fdbf7",
+      "generated": false
+    },
+    {
+      "path": "python/pyproject.toml",
+      "sha256": "60acc620234d34ddb5f93056135075830634513e289523b2f404119b90caa8d6",
+      "generated": false
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/__init__.py",
+      "sha256": "be2df9687f68b812583a707e922a2802763a665454b0496b79cf49e7ffaa05e0",
+      "generated": false
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_core/__init__.py",
+      "sha256": "19ae75474b4a4c5537b3cdd46ad856ab242414f1c3755bd8f74df7acd7aa91f5",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_core/cancel.py",
+      "sha256": "3f7cd6569a2a411109d72f9b3ea245db529546dde0fddadf2dd4bf5ab672b13a",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_core/config.py",
+      "sha256": "a2d8a3a1739124bef0503ca8588522a82a10b7f20cdc90f5f59b21855e3406c8",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_core/env.py",
+      "sha256": "dca1217a1416e0d7686f078146cabb8b29cd3683e21e0c2c862c3a5fee9a88d0",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_core/errors.py",
+      "sha256": "59f680eb0199f13e22f23d585dfd5ab95a77e539183f36e17eecc5c02ab91db5",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_core/health.py",
+      "sha256": "3fdfa5506479435efa0c3c7d6a6ad412ed06558fe23bd8749d1a254e999adc16",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_core/hooks.py",
+      "sha256": "bda49c3332a2e04fa00431ed9abf37341b15efff21957bcdf4fad28a725c5662",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_core/http.py",
+      "sha256": "bdc617f2e0c86f8d3883da81c54493252ceb7dfbb869990e58840763a748a7e8",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_core/redaction.py",
+      "sha256": "354a48f3076ad34b136fbf12605c787bddc9a5cb2d87ff15d6af3c2152ddbe01",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_core/resources.py",
+      "sha256": "eb3fac01dd54e4e732fbefce1aa7000fee023cd694ac6d1943d7984cde77fb1f",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_core/retry.py",
+      "sha256": "41a2a14735390a237d21a78e91e827e6f6d2b2fdb037ffdd4052675213a9c756",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_core/useragent.py",
+      "sha256": "4f7156bce768ebe703736f63e878f4ed86639452a8902a73c14e02c06ee1b2c2",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_tracing/__init__.py",
+      "sha256": "30cf9d1d11d73fd00783ccde596ba0f024fd5f94df2bfe531d10a27b171c44d8",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_tracing/_adapters.py",
+      "sha256": "8ad5a571cbdc37c636ff6d46c4d58c57fa9b2ed738132f45c464db441720997e",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_tracing/_config.py",
+      "sha256": "456d41d43ae2141530235a82c64bd454c7edae379adbceadd274237ea2811819",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_tracing/_helpers.py",
+      "sha256": "7a1fc4f6472a0fd23b2689bcf883894e5e906c236c770809350a0aa8ba34fdd4",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_tracing/_model.py",
+      "sha256": "c4d0816fac840d3503f63e489576d68a322350b51e214f484224ed27c5783776",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_tracing/_query.py",
+      "sha256": "b997e4eda8c4ce306c7ba6812de4b0ddec2569dfaa9a55f212adfefef8c19d1f",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_tracing/_setup.py",
+      "sha256": "bb031b7e0773ab1af5cc6fe8abb73987e156023854ba456a0ca4d24c56949377",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/_version.py",
+      "sha256": "326553d84c140a43dd807c7e7ffd9a77a0b48f004b8de216cf29e7959ca2ed0e",
+      "generated": false
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/client.py",
+      "sha256": "223b98935fcabea06b7e63ebf2112f5512330f97634377b438c08235df3712d7",
+      "generated": false
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/config.py",
+      "sha256": "a0b6260633c866562125bc2e895db7794fbd385837ead563320ceb963fa72334",
+      "generated": false
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/py.typed",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "generated": false
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/testing/__init__.py",
+      "sha256": "9efdf0da59941d4fef9b8526be1503b3b0010b70f0f9209e7f790d5b5f42a298",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/testing/memory_traces.py",
+      "sha256": "c30b18fb05cac1b7bcae8c2fc27ca5a8a58f25c24d172d183353ec724c1295fd",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/testing/runner.py",
+      "sha256": "6fe06a2b13d330492a10f1bf52331eca46c0275ac8e3b2efa390a9ccc470540c",
+      "generated": true
+    },
+    {
+      "path": "python/src/grow_grafana_tempo/testing/tracing_conformance.py",
+      "sha256": "224d0a38cb8dfccf5c8b9ede4d94704945dee2a83f21fa776f528364f8536e46",
+      "generated": true
+    },
+    {
+      "path": "python/tests/_support.py",
+      "sha256": "3032408fd7a2ca7e063a77f117054966fad3dfc7401daccd803c45eabdffada7",
+      "generated": false
+    },
+    {
+      "path": "python/tests/conftest.py",
+      "sha256": "7b95144d5dce3966c0c548f9bc8ea543bdfaade588b6855ba9e68cccb15e0f0c",
+      "generated": false
+    },
+    {
+      "path": "python/tests/test_client.py",
+      "sha256": "e6fe5721618776032a2ac08a7276acda5e92caa6341aa45536ab4c5f01091a4c",
+      "generated": false
+    },
+    {
+      "path": "python/tests/test_conformance_core.py",
+      "sha256": "60662e8727f9473cfbd191ba25dcb705050ba2e1052cb9b4907d8d92c362e967",
+      "generated": false
+    },
+    {
+      "path": "python/tests/test_core_async.py",
+      "sha256": "28570bfa0b70924e9a0148c310cafd4a0786a6beb0609817c58acd767932c9a2",
+      "generated": false
+    },
+    {
+      "path": "python/tests/test_core_basics.py",
+      "sha256": "614484bd65717ecb210f70c53d52aa51a08a62ea8617afea2a43ec7f76681d57",
+      "generated": false
+    },
+    {
+      "path": "python/tests/test_core_transport.py",
+      "sha256": "a14d587241001855f4b6d7b082475e8a181060626a0fe39dd3093abcb2121035",
+      "generated": false
+    },
+    {
+      "path": "python/tests/test_tools.py",
+      "sha256": "8c5122d6debebc54ab454de8a90f57aa3ec78834c491ac23a9edbab77938a177",
+      "generated": false
+    },
+    {
+      "path": "python/tests/test_tracing_adapters.py",
+      "sha256": "fc3f54fad40357c0da28a715f20ce3ae1596100673beede0e9dbc7d7139f95bf",
+      "generated": true
+    },
+    {
+      "path": "python/tests/test_tracing_conformance.py",
+      "sha256": "16118ed6802bb50a2d765a93e20b49b32b879479a3a73dbe0efa8f3ff0bf379a",
+      "generated": true
+    },
+    {
+      "path": "python/tests/test_tracing_helpers.py",
+      "sha256": "e36c80f55311ec85893b047828ad4021f379deacf43ecc54dc0717c257451039",
+      "generated": true
+    },
+    {
+      "path": "python/tests/test_tracing_model.py",
+      "sha256": "574c91677ff4d2790d818eb8247f68804280ecd868565722e37be70f0c52a461",
+      "generated": true
+    },
+    {
+      "path": "python/tests/test_tracing_query.py",
+      "sha256": "e8b5e195fb572b16a25d98c5b47a41b8da45a8cfeae9791c73f52a44b0268ba8",
+      "generated": true
+    },
+    {
+      "path": "python/tests/test_tracing_setup.py",
+      "sha256": "eb68a51d236dc53ab9033abd53a5fbf0d105b76cd09735cc2ea13dd5cd0dd22d",
+      "generated": true
+    },
+    {
+      "path": "python/tools/covergate.py",
+      "sha256": "ef3e9d92158a21addf97f1b02a773ed3ec039b09d7fc6fcc20f055cb503d8aeb",
+      "generated": false
+    },
+    {
+      "path": "python/tools/licensecheck.py",
+      "sha256": "723cd178d92bc2fafe4ea94c14939ad105978c7daa6e5b4f59bbbb05116776a8",
+      "generated": false
+    },
+    {
+      "path": "docker/Dockerfile.java",
+      "sha256": "d2f73517e2fc2b01766de961d400187cc3cf7dae8e54f95613d5c95d69d0be6c",
+      "generated": true
+    },
+    {
+      "path": "examples/java/README.md",
+      "sha256": "febd16bd12765e9ade254480fe943cdd94589c3e6264c99e75fc54ac8ebec5bc",
+      "generated": false
+    },
+    {
+      "path": "examples/java/pom.xml",
+      "sha256": "0e5adbed8cc122ff2055237524ebe68cf26edf2f5f98c69e7c739a72de34182a",
+      "generated": false
+    },
+    {
+      "path": "examples/java/src/main/java/codes/grow/packages/tempo/examples/AsyncExample.java",
+      "sha256": "49399a032c44faeac34eb9a5656770ebf33232743f54d389cc07c08527867dcc",
+      "generated": false
+    },
+    {
+      "path": "examples/java/src/main/java/codes/grow/packages/tempo/examples/BasicExample.java",
+      "sha256": "af3efaa5cdaffc4d4e59cb29f5f693ea55faca2da402447c633de526b7aa09e5",
+      "generated": false
+    },
+    {
+      "path": "examples/java/src/main/java/codes/grow/packages/tempo/examples/HooksAndLoggingExample.java",
+      "sha256": "ab5a0df7ea3c494dc7955b0a82ac3bdeb2f4bc94be5184575bb1962ef09a9053",
       "generated": false
     },
     {
@@ -1170,288 +1795,23 @@
       "generated": true
     },
     {
-      "path": "mkdocs.yml",
-      "sha256": "ddddf35bf10163fd3cb24e6efa51b09fd865fd9980ed38d0a762ce484b043955",
+      "path": "docker/Dockerfile.rust",
+      "sha256": "fdf90fcb83b62b16ba67492678c2d047d2db0b2f5d0062604460e5b1edbeeb6a",
+      "generated": true
+    },
+    {
+      "path": "examples/rust/.gitignore",
+      "sha256": "9cc2c8cc102e0b2a0a177c8f594abc9b9776300a04473c24b45d52c1007a4119",
       "generated": false
     },
     {
-      "path": "python/.gitignore",
-      "sha256": "01f3f0fd19ef34925f75f5b0b0f3722e2d23f64cc8d042d784e8fb542a2f8fea",
+      "path": "examples/rust/Cargo.toml",
+      "sha256": "3fe90b3c2ec2826fd15f9e86795c2b66438b08d8b76013926b0b00958ddc928b",
       "generated": false
     },
     {
-      "path": "python/Makefile",
-      "sha256": "96eee533c6bed81bd5972387b5189d2eef62e3c3cf09d7f161f890e376f284a1",
-      "generated": false
-    },
-    {
-      "path": "python/README.md",
-      "sha256": "35c10161a638703c26d67966ea849531f9b00c5d5f67ce62f3206e0fe732be09",
-      "generated": false
-    },
-    {
-      "path": "python/docs/index.md",
-      "sha256": "e38699e2a61d8bc00eccedb8fe4518e9b12eab0f4d088394c7ddfe11da7fd02a",
-      "generated": false
-    },
-    {
-      "path": "python/integration/conftest.py",
-      "sha256": "2d0dea0e780df4d0249535a299f57c37a467e5c18decbc1fbf5dc7244c69c9d6",
-      "generated": false
-    },
-    {
-      "path": "python/integration/factories.py",
-      "sha256": "bfea7825929356ea070bb18908c0b176ac039340a46ef6572a372d1c7ead9c19",
-      "generated": false
-    },
-    {
-      "path": "python/integration/pytest.ini",
-      "sha256": "33d992dffbeecbf614fc846a9eb74fae61ac98c142a9b331534d796f3820dcc1",
-      "generated": false
-    },
-    {
-      "path": "python/integration/requirements.txt",
-      "sha256": "ce85c94bb91bcc689bc6c4e47205545eeddce754a853fc5301b7092f29dcef34",
-      "generated": false
-    },
-    {
-      "path": "python/integration/test_core.py",
-      "sha256": "087573bb27189d4e8a029c491427a67c2b91a0939b21e4c276c5a116502b80bb",
-      "generated": false
-    },
-    {
-      "path": "python/mkdocs.yml",
-      "sha256": "224f02963effae70a7ffc060136848d7d0d0fe8315fafae1304d07645d4fdbf7",
-      "generated": false
-    },
-    {
-      "path": "python/pyproject.toml",
-      "sha256": "60acc620234d34ddb5f93056135075830634513e289523b2f404119b90caa8d6",
-      "generated": false
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/__init__.py",
-      "sha256": "be2df9687f68b812583a707e922a2802763a665454b0496b79cf49e7ffaa05e0",
-      "generated": false
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_core/__init__.py",
-      "sha256": "19ae75474b4a4c5537b3cdd46ad856ab242414f1c3755bd8f74df7acd7aa91f5",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_core/cancel.py",
-      "sha256": "3f7cd6569a2a411109d72f9b3ea245db529546dde0fddadf2dd4bf5ab672b13a",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_core/config.py",
-      "sha256": "a2d8a3a1739124bef0503ca8588522a82a10b7f20cdc90f5f59b21855e3406c8",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_core/env.py",
-      "sha256": "dca1217a1416e0d7686f078146cabb8b29cd3683e21e0c2c862c3a5fee9a88d0",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_core/errors.py",
-      "sha256": "59f680eb0199f13e22f23d585dfd5ab95a77e539183f36e17eecc5c02ab91db5",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_core/health.py",
-      "sha256": "3fdfa5506479435efa0c3c7d6a6ad412ed06558fe23bd8749d1a254e999adc16",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_core/hooks.py",
-      "sha256": "bda49c3332a2e04fa00431ed9abf37341b15efff21957bcdf4fad28a725c5662",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_core/http.py",
-      "sha256": "bdc617f2e0c86f8d3883da81c54493252ceb7dfbb869990e58840763a748a7e8",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_core/redaction.py",
-      "sha256": "354a48f3076ad34b136fbf12605c787bddc9a5cb2d87ff15d6af3c2152ddbe01",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_core/resources.py",
-      "sha256": "eb3fac01dd54e4e732fbefce1aa7000fee023cd694ac6d1943d7984cde77fb1f",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_core/retry.py",
-      "sha256": "41a2a14735390a237d21a78e91e827e6f6d2b2fdb037ffdd4052675213a9c756",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_core/useragent.py",
-      "sha256": "4f7156bce768ebe703736f63e878f4ed86639452a8902a73c14e02c06ee1b2c2",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_tracing/__init__.py",
-      "sha256": "30cf9d1d11d73fd00783ccde596ba0f024fd5f94df2bfe531d10a27b171c44d8",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_tracing/_adapters.py",
-      "sha256": "8ad5a571cbdc37c636ff6d46c4d58c57fa9b2ed738132f45c464db441720997e",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_tracing/_config.py",
-      "sha256": "456d41d43ae2141530235a82c64bd454c7edae379adbceadd274237ea2811819",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_tracing/_helpers.py",
-      "sha256": "7a1fc4f6472a0fd23b2689bcf883894e5e906c236c770809350a0aa8ba34fdd4",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_tracing/_model.py",
-      "sha256": "c4d0816fac840d3503f63e489576d68a322350b51e214f484224ed27c5783776",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_tracing/_query.py",
-      "sha256": "b997e4eda8c4ce306c7ba6812de4b0ddec2569dfaa9a55f212adfefef8c19d1f",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_tracing/_setup.py",
-      "sha256": "bb031b7e0773ab1af5cc6fe8abb73987e156023854ba456a0ca4d24c56949377",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/_version.py",
-      "sha256": "326553d84c140a43dd807c7e7ffd9a77a0b48f004b8de216cf29e7959ca2ed0e",
-      "generated": false
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/client.py",
-      "sha256": "223b98935fcabea06b7e63ebf2112f5512330f97634377b438c08235df3712d7",
-      "generated": false
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/config.py",
-      "sha256": "a0b6260633c866562125bc2e895db7794fbd385837ead563320ceb963fa72334",
-      "generated": false
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/py.typed",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "generated": false
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/testing/__init__.py",
-      "sha256": "9efdf0da59941d4fef9b8526be1503b3b0010b70f0f9209e7f790d5b5f42a298",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/testing/memory_traces.py",
-      "sha256": "c30b18fb05cac1b7bcae8c2fc27ca5a8a58f25c24d172d183353ec724c1295fd",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/testing/runner.py",
-      "sha256": "6fe06a2b13d330492a10f1bf52331eca46c0275ac8e3b2efa390a9ccc470540c",
-      "generated": true
-    },
-    {
-      "path": "python/src/grow_grafana_tempo/testing/tracing_conformance.py",
-      "sha256": "224d0a38cb8dfccf5c8b9ede4d94704945dee2a83f21fa776f528364f8536e46",
-      "generated": true
-    },
-    {
-      "path": "python/tests/_support.py",
-      "sha256": "3032408fd7a2ca7e063a77f117054966fad3dfc7401daccd803c45eabdffada7",
-      "generated": false
-    },
-    {
-      "path": "python/tests/conftest.py",
-      "sha256": "7b95144d5dce3966c0c548f9bc8ea543bdfaade588b6855ba9e68cccb15e0f0c",
-      "generated": false
-    },
-    {
-      "path": "python/tests/test_client.py",
-      "sha256": "e6fe5721618776032a2ac08a7276acda5e92caa6341aa45536ab4c5f01091a4c",
-      "generated": false
-    },
-    {
-      "path": "python/tests/test_conformance_core.py",
-      "sha256": "60662e8727f9473cfbd191ba25dcb705050ba2e1052cb9b4907d8d92c362e967",
-      "generated": false
-    },
-    {
-      "path": "python/tests/test_core_async.py",
-      "sha256": "28570bfa0b70924e9a0148c310cafd4a0786a6beb0609817c58acd767932c9a2",
-      "generated": false
-    },
-    {
-      "path": "python/tests/test_core_basics.py",
-      "sha256": "614484bd65717ecb210f70c53d52aa51a08a62ea8617afea2a43ec7f76681d57",
-      "generated": false
-    },
-    {
-      "path": "python/tests/test_core_transport.py",
-      "sha256": "a14d587241001855f4b6d7b082475e8a181060626a0fe39dd3093abcb2121035",
-      "generated": false
-    },
-    {
-      "path": "python/tests/test_tools.py",
-      "sha256": "8c5122d6debebc54ab454de8a90f57aa3ec78834c491ac23a9edbab77938a177",
-      "generated": false
-    },
-    {
-      "path": "python/tests/test_tracing_adapters.py",
-      "sha256": "fc3f54fad40357c0da28a715f20ce3ae1596100673beede0e9dbc7d7139f95bf",
-      "generated": true
-    },
-    {
-      "path": "python/tests/test_tracing_conformance.py",
-      "sha256": "16118ed6802bb50a2d765a93e20b49b32b879479a3a73dbe0efa8f3ff0bf379a",
-      "generated": true
-    },
-    {
-      "path": "python/tests/test_tracing_helpers.py",
-      "sha256": "e36c80f55311ec85893b047828ad4021f379deacf43ecc54dc0717c257451039",
-      "generated": true
-    },
-    {
-      "path": "python/tests/test_tracing_model.py",
-      "sha256": "574c91677ff4d2790d818eb8247f68804280ecd868565722e37be70f0c52a461",
-      "generated": true
-    },
-    {
-      "path": "python/tests/test_tracing_query.py",
-      "sha256": "e8b5e195fb572b16a25d98c5b47a41b8da45a8cfeae9791c73f52a44b0268ba8",
-      "generated": true
-    },
-    {
-      "path": "python/tests/test_tracing_setup.py",
-      "sha256": "eb68a51d236dc53ab9033abd53a5fbf0d105b76cd09735cc2ea13dd5cd0dd22d",
-      "generated": true
-    },
-    {
-      "path": "python/tools/covergate.py",
-      "sha256": "ef3e9d92158a21addf97f1b02a773ed3ec039b09d7fc6fcc20f055cb503d8aeb",
-      "generated": false
-    },
-    {
-      "path": "python/tools/licensecheck.py",
-      "sha256": "723cd178d92bc2fafe4ea94c14939ad105978c7daa6e5b4f59bbbb05116776a8",
-      "generated": false
-    },
-    {
-      "path": "release-please-config.json",
-      "sha256": "77cdef30a16270ef46511664797ebcacdcef8430101628afd1ce099725e7fa50",
+      "path": "examples/rust/src/main.rs",
+      "sha256": "3e08667cf278ca9adb7e266c0773955b22781f883ea087414e5126477e6171a5",
       "generated": false
     },
     {
@@ -1461,7 +1821,7 @@
     },
     {
       "path": "rust/Cargo.toml",
-      "sha256": "4bfc11bcc21ecb281fc9918ca59e22ed68b695ce3cf3dd5313506ea52b31d44b",
+      "sha256": "65e907bb0ed47b51dd4800ccebf03df6ed9fe88c60390c0ad8252abb3ea4bec1",
       "generated": false
     },
     {
@@ -1471,7 +1831,7 @@
     },
     {
       "path": "rust/README.md",
-      "sha256": "2d5f809740f356f9f0b4c6ca161326756f80ab0f915ee320d217da06593fb945",
+      "sha256": "b81c711f33f7210b08e1a300a415aea432b594a77b244632f6930d38ce6e8f6e",
       "generated": false
     },
     {
@@ -1481,7 +1841,7 @@
     },
     {
       "path": "rust/integration/Cargo.toml",
-      "sha256": "5c67bfddf3594cbd4a5231ba549ad5354969653a4139721a50bb3c1090716629",
+      "sha256": "134292c1b03f28051c80e5b1427728799d201afc729f8e4e8e45b58a6d76b7f0",
       "generated": false
     },
     {
@@ -1731,388 +2091,28 @@
     },
     {
       "path": "rust/tests/tracing_adapters.rs",
-      "sha256": "8860ae23a788404c4f99fc4d9350416fc6c42ab948177672c60d261a981861d9",
+      "sha256": "3f08cbd82ddfda09a10e36ea4006f9e713a6cf40c5a6f6fb2372d63111f123e6",
       "generated": true
     },
     {
       "path": "rust/tests/tracing_conformance.rs",
-      "sha256": "0f529b74ea7bccad63a69d030789707ca4bda6a6b2717f2a21a37b645c406584",
+      "sha256": "26b2124a26f4b88e24e3321c690efa527e3a30b19ab47187e586dd22f2245994",
       "generated": true
     },
     {
       "path": "rust/tests/tracing_local.rs",
-      "sha256": "0012d25ce89fe5a3875b57b3cb61d73f3c02bec478ed78e799f5f61fc6cc1733",
+      "sha256": "29b6d081b57b32e537c929d5bf10849796fa45f8dab72093a07d3d5cae1790bf",
       "generated": true
     },
     {
       "path": "rust/tests/tracing_model.rs",
-      "sha256": "77809b339b9f6b8b9f5e708fa13e92d786f041f8587e2745de49e049e608da23",
+      "sha256": "838d380e18e31513488862ffc08a230939cd3c882fed5a3bae8d399424e55728",
       "generated": true
     },
     {
       "path": "rust/tests/tracing_pipeline.rs",
-      "sha256": "dbf0349dee4f6b6ba4c1ad7e92394e54631885551ce768ff63f91f9322ab676f",
+      "sha256": "d322815e2b59a85e4fe000f3c3cbde5b679fc40a37e7b3fe4ad39a7e7f47e961",
       "generated": true
-    },
-    {
-      "path": "skills/grafana-tempo-sdk/SKILL.md",
-      "sha256": "446e3fb1df27a79b9dda4fb89562d9fcd5f28fad73a8e2001f115312b1b78e91",
-      "generated": false
-    },
-    {
-      "path": "typescript/.gitignore",
-      "sha256": "5c1047c750a2666a14d7f1a008f8a2fdc83919fef915293bcff36b44dedc1071",
-      "generated": false
-    },
-    {
-      "path": "typescript/.prettierignore",
-      "sha256": "213e9f826f00551adae35eba3e3877d93666f7626e3358d1392bcea95bdf3fdb",
-      "generated": true
-    },
-    {
-      "path": "typescript/.prettierrc.json",
-      "sha256": "ac5868af5fec64d1f0285340fd1b9f3536e387a9bd626d9e87ff6fb1098905b1",
-      "generated": false
-    },
-    {
-      "path": "typescript/Makefile",
-      "sha256": "0f6a79ff9f891acb7ecd8133a1851bf52c730ab78d39acec6177f9694faee073",
-      "generated": false
-    },
-    {
-      "path": "typescript/README.md",
-      "sha256": "63e6a7fec0f1d5f02ec96b61b15fbbfa392c8a472750878cb3700ee78d6d0fa8",
-      "generated": false
-    },
-    {
-      "path": "typescript/eslint.config.js",
-      "sha256": "39ab9ba36449e42f05aab17a484ca8b4114aaef220f313ada66a107351b75eb5",
-      "generated": false
-    },
-    {
-      "path": "typescript/integration/README.md",
-      "sha256": "89e1a54ddcc741a410121316a9ffb8f1aa99ddc59ce296b9bfe2ef70d673e5e9",
-      "generated": false
-    },
-    {
-      "path": "typescript/integration/package.json",
-      "sha256": "196762c09196527c6d105ed43c7d7b3846f7bf5b2bc4bece12b0e30e78442d20",
-      "generated": false
-    },
-    {
-      "path": "typescript/integration/test/client.test.ts",
-      "sha256": "f3e2a4e3709a7ede9bd406d21fc0f8be056eb854c7bf730f7701f046dd18c773",
-      "generated": false
-    },
-    {
-      "path": "typescript/integration/test/conformance.test.ts",
-      "sha256": "c51d87a4c391d6a8c226adcf340a0a8878a70bba4c9da941afeba9b5211d01c7",
-      "generated": false
-    },
-    {
-      "path": "typescript/integration/test/env.ts",
-      "sha256": "4d01e4976c06fa4be83c9c9d24882c97a2be99e8ff4edcfdfd8db20a9e33a06f",
-      "generated": false
-    },
-    {
-      "path": "typescript/package.json",
-      "sha256": "bda3c05d8681f9882beef41ad469ef64b2dabf4195b9387c50eab39351a34be2",
-      "generated": false
-    },
-    {
-      "path": "typescript/scripts/coverage-summary.mjs",
-      "sha256": "e2a9958208d11b3d875b65b46d2d469ddb7cd4de50d8881f948680285852c296",
-      "generated": false
-    },
-    {
-      "path": "typescript/scripts/license-check.mjs",
-      "sha256": "4bffff0bf732c4490d51d3b2409b11973e4a28400d16433831748d4067e3fe04",
-      "generated": false
-    },
-    {
-      "path": "typescript/src/client.ts",
-      "sha256": "defdd0843d0904f52e2d3ca7e990cd2e40d0f77b2cb39e34f95216147001ba10",
-      "generated": false
-    },
-    {
-      "path": "typescript/src/config.ts",
-      "sha256": "b314832aad074f22233508aa3e90b9af43903c3c1b2d2965630acfb3f7e6a7fe",
-      "generated": false
-    },
-    {
-      "path": "typescript/src/core/abort.ts",
-      "sha256": "34f1f2093daa6c819c617b8ad9c103bdb0031e5ce4a390015518500e8b9a2c7f",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/core/env.ts",
-      "sha256": "1c3a42c80b5a5baf50f2d64636444566aa3748b9d3130ba88c640b6914d2b09b",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/core/errors.ts",
-      "sha256": "fd05433aa437c571ed81c1119a374b96bb34a2da74604c94583e74c3b5ae821b",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/core/health.ts",
-      "sha256": "da7222f73ba391066ccff64b1d34abf6d2757762b51f4d79706e3223d47df2d7",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/core/hooks.ts",
-      "sha256": "51df6f6089e0ed54e1b292557d52d11bdb424a403a69b08e6b56a87d0d943ced",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/core/index.ts",
-      "sha256": "30b30001828e2258324f98bfb088b9ca04df9248bcc688f19f74f266ee73b1ce",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/core/options.ts",
-      "sha256": "2583818bbe16a3c3357ab5f75a88c46e5fa6c0951e701e178c41a00e2f30ca16",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/core/poll.ts",
-      "sha256": "57d00dd9588b4ebed3a7abbeafe2ad39309342a84ef6e1c770408db1180bb954",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/core/redaction.ts",
-      "sha256": "c85a186230297d7cb465d233d09dc082952ca445c1f08658f39afaf57f1348e8",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/core/retry.ts",
-      "sha256": "ff9836735d248ef415430d5b554008ceac9f3e95e0667eefc929c5bed87fd9f1",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/core/transport.ts",
-      "sha256": "fe6d5cc17c55b9f7b04839080825f1d4f0c2e9885fe5be5e55d062c34d2a8f31",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/core/version.ts",
-      "sha256": "c11e0da9ca9919de15b62e96e8fd49ea9a2f4ffd3866cec57262480479095ff1",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/index.ts",
-      "sha256": "86033601e5c9b1c0d5184fdf20e87538631228a446692664a4fbf71afe2cc725",
-      "generated": false
-    },
-    {
-      "path": "typescript/src/testing/core-ops.ts",
-      "sha256": "b5dba2e8a462d60e38b8e4f615c546f3d6da52052a2a3844bb11f932aa9ae841",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/testing/expect.ts",
-      "sha256": "adb25caaedb93ec5516ebb890d615073f86c8e469c7ff1c371668716aeb304ae",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/testing/index.ts",
-      "sha256": "9cad5dddc99c218e4e707ea0bf192b45a5ac7dfc7b205523cf2749852e8eb1ff",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/testing/memory-traces.ts",
-      "sha256": "6c0a6a26b2b2ce068b700bc8b21c0da45efb2b7ed8369689f02bab0b230f2154",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/testing/ops.ts",
-      "sha256": "2ad46ec1cce4b421ebd17d4f5d493503e54a93c56705986912e90cae86f353cd",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/testing/runner.ts",
-      "sha256": "05cb204fe5751e7f6e12be98ce97ecf5a035c846a9efc230c25334df86e31698",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/testing/tracing-ops.ts",
-      "sha256": "1a317ba62c222798015e104478775171acc87955fb95586ed8eff2698bc43cfb",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/tracing/attributes.ts",
-      "sha256": "6b32e00765b25253593ea5484f7a8102f8b1e5e31e25870f2d577fc7289100d4",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/tracing/config.ts",
-      "sha256": "cf599ed898067cb61eab4ae9a45ed6ae4f4d79e85e8e307ada7af7355d7117c9",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/tracing/express.ts",
-      "sha256": "d78e6981903feae880963086dfc5fdff1f55391d253b67983d2a284cf6a43696",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/tracing/fastify.ts",
-      "sha256": "8f55d7698a9347fef84deef7b1939548d4f0b86a5c17cf148d67dcd383f5bf74",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/tracing/fetch.ts",
-      "sha256": "869bd7e1be269c0714a6c230ec4a9671f2efa015b1ae8a15a6663240cd635248",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/tracing/helpers.ts",
-      "sha256": "7e6286f51a70d8ed76c497861743aff696418da25e19e0b712aeab9e9d49be42",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/tracing/http.ts",
-      "sha256": "75c1748d5f6896927ef3d0c0611cda650688834b285817166695e49a915fde41",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/tracing/index.ts",
-      "sha256": "dce98fc26665dddc5a875c49c2131147c2a591ca4f66befc553eb2909b0f3fd6",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/tracing/init.ts",
-      "sha256": "fc28c1b33dea41d3ca5ed5cf53f287923e71e0a8eb3a769390c086f561f9ffb9",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/tracing/model.ts",
-      "sha256": "ec0d847d082275d299790c6cb3d78e4df27f601a7346f0c9b817657d798dbaf3",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/tracing/nest.ts",
-      "sha256": "e24ef473ad187f0eeec89e0c209ee7e79d79d43483b0e64a0b57df9e15634064",
-      "generated": true
-    },
-    {
-      "path": "typescript/src/tracing/query.ts",
-      "sha256": "973eb0b9ccd5984bf137be97eef4b5ac65db339aacf09602bf0bcfe3e055329e",
-      "generated": true
-    },
-    {
-      "path": "typescript/test/client.test.ts",
-      "sha256": "c6ea4308f689986111d02dfd193bd5d476658710d2cd95b4b2092c853f591ed6",
-      "generated": false
-    },
-    {
-      "path": "typescript/test/core/env.test.ts",
-      "sha256": "78e33f0b706acbd64ad3f476c7ff40eeeb7c84f4104e9945d27a8e2bea0fd7d5",
-      "generated": false
-    },
-    {
-      "path": "typescript/test/core/errors.test.ts",
-      "sha256": "8cd0013704105e97ce494b59b0fb58351da5e5bb475445d1f9030e97928413ae",
-      "generated": false
-    },
-    {
-      "path": "typescript/test/core/misc.test.ts",
-      "sha256": "edcf09ed157a0537f59b79e14ffc5b2bba30967633c4969d6044d00ebfe470cb",
-      "generated": false
-    },
-    {
-      "path": "typescript/test/core/redaction.test.ts",
-      "sha256": "57bc7c687bab8095621a19f932b7f3de99fa52f0e88c2811a399dc5ec6d3d831",
-      "generated": false
-    },
-    {
-      "path": "typescript/test/core/retry.test.ts",
-      "sha256": "04762ec9bbc952e81efbeee6420839d4de8b1ba5ff79cd2d7d516084fb594551",
-      "generated": false
-    },
-    {
-      "path": "typescript/test/core/tls.test.ts",
-      "sha256": "351ff973bf8c2c50d53e4789c229d319e087b48c9308871c196abf7dd2a9275f",
-      "generated": false
-    },
-    {
-      "path": "typescript/test/core/transport.test.ts",
-      "sha256": "f73c48acc898ed7454e71f7b9b5b80b6e8b939aa36187ea9bc207bfdba1209dc",
-      "generated": false
-    },
-    {
-      "path": "typescript/test/helpers/logger.ts",
-      "sha256": "807994885966ea99e97e53c3f25e91631903e5843b3418c718a213f01ba18170",
-      "generated": false
-    },
-    {
-      "path": "typescript/test/helpers/server.ts",
-      "sha256": "6909848d4b8f86ea33ef9571a1443684041d011d53d12d3cf82d7d23a2941589",
-      "generated": false
-    },
-    {
-      "path": "typescript/test/testing/conformance.test.ts",
-      "sha256": "d786fce162f8dc75e1eb63bf081588083b5223f128c1219849a6fc8069ceae49",
-      "generated": false
-    },
-    {
-      "path": "typescript/test/testing/expect.test.ts",
-      "sha256": "cbe630db6313b46ed476ed4b4af20632c225fa3ba64b6e940ffa47d748386235",
-      "generated": false
-    },
-    {
-      "path": "typescript/test/testing/runner.test.ts",
-      "sha256": "a6fe2ba39234699b29a5b1e6e95f228e9cb2f79ee19c63d6a5db67a28d3d82b2",
-      "generated": false
-    },
-    {
-      "path": "typescript/test/tracing/adapters.test.ts",
-      "sha256": "16f689ae2f3e7e33475ec25aa264cc831ff0922e71dadc740df2394afcdb7255",
-      "generated": true
-    },
-    {
-      "path": "typescript/test/tracing/helpers.test.ts",
-      "sha256": "ca2ec3aadecc6d01d9326856ba4f884d3960ea086e8c5dd8d8446a3ed033cbbf",
-      "generated": true
-    },
-    {
-      "path": "typescript/test/tracing/init.test.ts",
-      "sha256": "c3e345b0ece7297ba7035f22d49818a2de885bfbd2dddd5a10508bfc39f3cc3b",
-      "generated": true
-    },
-    {
-      "path": "typescript/test/tracing/memory-conformance.test.ts",
-      "sha256": "688ff5e2adbe84bbba21be0a5795ee9d59670eadebd6b135e4ef084d8b42c538",
-      "generated": true
-    },
-    {
-      "path": "typescript/test/tracing/model.test.ts",
-      "sha256": "155648d79c9465d84b46af6dfa3426bce373899b9b31c9d365c6915e98d5332c",
-      "generated": true
-    },
-    {
-      "path": "typescript/test/tracing/schema.test.ts",
-      "sha256": "7f5859703275eef5bdecaf4067b9b27a4dd1de590f8a8118acdda0ac63414627",
-      "generated": true
-    },
-    {
-      "path": "typescript/tsconfig.json",
-      "sha256": "709f99522a3330d20362173e1beae793009ec05e0a5be4715071794376bb738f",
-      "generated": false
-    },
-    {
-      "path": "typescript/tsup.config.ts",
-      "sha256": "9a086b7b970de220f1604f52c2ecd1b5a9ee66d053fff28a5b734d50f43dfd2a",
-      "generated": false
-    },
-    {
-      "path": "typescript/typedoc.json",
-      "sha256": "90363780e59f3beb9582f71a783e2f52241b1a1dd25ed670c4fdde9894d4abad",
-      "generated": false
-    },
-    {
-      "path": "typescript/vitest.config.ts",
-      "sha256": "343308680b40890a23a58cf621145ee788fa613b23f3dec3a02e565cd47b0b8f",
-      "generated": false
     }
   ]
 }
