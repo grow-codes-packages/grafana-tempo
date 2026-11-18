@@ -1,0 +1,33 @@
+{
+  "function": "searchTags",
+  "case": "v2-filtered-q",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/search/tags",
+    "query": {
+      "start": "1795034947",
+      "end": "1795035067",
+      "scope": "span",
+      "q": "{ resource.service.name = \"grow-sdk-verify-179503498127460-db\" }"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "scopes": [
+        {
+          "name": "span",
+          "tags": [
+            "db.system.name",
+            "http.request.method",
+            "http.response.status_code"
+          ]
+        }
+      ],
+      "metrics": {
+        "inspectedBytes": "26347"
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "function": "otlpHttpJson",
+  "case": "invalid-json-400",
+  "request": {
+    "method": "POST",
+    "path": "/v1/traces",
+    "body": "<bytes>"
+  },
+  "response": {
+    "status": 400,
+    "contentType": "application/json",
+    "body": {
+      "code": 3,
+      "message": "ReadObject: expect \" after {, but found n, error found in #2 byte of ...|{not json|..., bigger context ...|{not json|..."
+    }
+  }
+}

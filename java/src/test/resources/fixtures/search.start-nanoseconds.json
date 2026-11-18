@@ -1,0 +1,18 @@
+{
+  "function": "search",
+  "case": "start-nanoseconds",
+  "request": {
+    "method": "GET",
+    "path": "/api/search",
+    "query": {
+      "q": "{ resource.service.name = \"grow-sdk-verify-179503498127460-api\" }",
+      "start": "1795034947000000000",
+      "end": "1795035067000000000"
+    }
+  },
+  "response": {
+    "status": 400,
+    "contentType": "text/plain; charset=utf-8",
+    "body": "invalid start: strconv.ParseUint: parsing \"1795034947000000000\": value out of range"
+  }
+}

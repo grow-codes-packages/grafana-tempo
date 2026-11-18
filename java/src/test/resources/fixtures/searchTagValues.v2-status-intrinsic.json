@@ -1,0 +1,33 @@
+{
+  "function": "searchTagValues",
+  "case": "v2-status-intrinsic",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/search/tag/status/values",
+    "query": {
+      "start": "1795034947",
+      "end": "1795035067"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "tagValues": [
+        {
+          "type": "keyword",
+          "value": "ok"
+        },
+        {
+          "type": "keyword",
+          "value": "error"
+        },
+        {
+          "type": "keyword",
+          "value": "unset"
+        }
+      ],
+      "metrics": {}
+    }
+  }
+}

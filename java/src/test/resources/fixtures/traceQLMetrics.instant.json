@@ -1,0 +1,36 @@
+{
+  "function": "traceQLMetrics",
+  "case": "instant",
+  "request": {
+    "method": "GET",
+    "path": "/api/metrics/query",
+    "query": {
+      "q": "{ resource.service.name = \"grow-sdk-verify-179503498127460-api\" } | count_over_time()",
+      "since": "15m"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "series": [
+        {
+          "labels": [
+            {
+              "key": "__name__",
+              "value": {
+                "stringValue": "count_over_time"
+              }
+            }
+          ],
+          "value": 4
+        }
+      ],
+      "metrics": {
+        "inspectedBytes": "26849",
+        "completedJobs": 1,
+        "totalJobs": 1
+      }
+    }
+  }
+}

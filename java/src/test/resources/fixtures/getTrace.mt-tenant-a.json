@@ -1,0 +1,159 @@
+{
+  "function": "getTrace",
+  "case": "mt-tenant-a",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/traces/0af7651916cd43dd8448eb211c80319c",
+    "headers": {
+      "X-Scope-OrgID": "tenant-a"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "trace": {
+        "resourceSpans": [
+          {
+            "resource": {
+              "attributes": [
+                {
+                  "key": "deployment.environment.name",
+                  "value": {
+                    "stringValue": "test"
+                  }
+                },
+                {
+                  "key": "service.version",
+                  "value": {
+                    "stringValue": "1.2.3"
+                  }
+                },
+                "…trimmed 1 more"
+              ]
+            },
+            "scopeSpans": [
+              {
+                "scope": {
+                  "name": "grow-sdk-bootstrap",
+                  "version": "0.1.0"
+                },
+                "spans": [
+                  {
+                    "traceId": "CvdlGRbNQ92ESOshHIAxnA==",
+                    "spanId": "EAAAAAAAAAE=",
+                    "name": "GET /seed",
+                    "kind": "SPAN_KIND_SERVER",
+                    "startTimeUnixNano": "1795034968000000000",
+                    "endTimeUnixNano": "1795034969000000000",
+                    "attributes": [
+                      {
+                        "key": "grow.seed",
+                        "value": {
+                          "boolValue": true
+                        }
+                      },
+                      {
+                        "key": "http.request.method",
+                        "value": {
+                          "stringValue": "GET"
+                        }
+                      },
+                      "…trimmed 1 more"
+                    ],
+                    "events": [
+                      {
+                        "timeUnixNano": "1795034968250000000",
+                        "name": "seed-event",
+                        "attributes": [
+                          {
+                            "key": "n",
+                            "value": {
+                              "intValue": "1"
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "status": {
+                      "code": "STATUS_CODE_OK"
+                    }
+                  },
+                  {
+                    "traceId": "CvdlGRbNQ92ESOshHIAxnA==",
+                    "spanId": "EAAAAAAAAAI=",
+                    "parentSpanId": "EAAAAAAAAAE=",
+                    "name": "call db",
+                    "kind": "SPAN_KIND_CLIENT",
+                    "startTimeUnixNano": "1795034968250000000",
+                    "endTimeUnixNano": "1795034968750000000",
+                    "links": [
+                      {
+                        "traceId": "CvdlGRbNQ92ESOshHIAxnA==",
+                        "spanId": "IAAAAAAAAAE=",
+                        "attributes": [
+                          {
+                            "key": "link.kind",
+                            "value": {
+                              "stringValue": "seed"
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "status": {}
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "resource": {
+              "attributes": [
+                {
+                  "key": "service.name",
+                  "value": {
+                    "stringValue": "grow-sdk-seed-db"
+                  }
+                }
+              ]
+            },
+            "scopeSpans": [
+              {
+                "scope": {
+                  "name": "grow-sdk-bootstrap"
+                },
+                "spans": [
+                  {
+                    "traceId": "CvdlGRbNQ92ESOshHIAxnA==",
+                    "spanId": "EAAAAAAAAAM=",
+                    "parentSpanId": "EAAAAAAAAAI=",
+                    "name": "SELECT seed",
+                    "kind": "SPAN_KIND_SERVER",
+                    "startTimeUnixNano": "1795034968250000000",
+                    "endTimeUnixNano": "1795034968750000000",
+                    "attributes": [
+                      {
+                        "key": "db.system.name",
+                        "value": {
+                          "stringValue": "postgresql"
+                        }
+                      }
+                    ],
+                    "status": {
+                      "message": "seed failure",
+                      "code": "STATUS_CODE_ERROR"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "metrics": {
+        "inspectedBytes": "25064"
+      }
+    }
+  }
+}
