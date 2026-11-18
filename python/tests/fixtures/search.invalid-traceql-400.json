@@ -1,0 +1,18 @@
+{
+  "function": "search",
+  "case": "invalid-traceql-400",
+  "request": {
+    "method": "GET",
+    "path": "/api/search",
+    "query": {
+      "q": "{ bad",
+      "start": "1795034947",
+      "end": "1795035067"
+    }
+  },
+  "response": {
+    "status": 400,
+    "contentType": "text/plain; charset=utf-8",
+    "body": "invalid TraceQL query: parse error at line 1, col 3: unknown identifier: bad"
+  }
+}

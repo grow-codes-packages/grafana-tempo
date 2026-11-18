@@ -1,0 +1,18 @@
+{
+  "function": "search",
+  "case": "mt-no-tenant-401",
+  "request": {
+    "method": "GET",
+    "path": "/api/search",
+    "query": {
+      "q": "{}",
+      "start": "1795034947",
+      "end": "1795035067"
+    }
+  },
+  "response": {
+    "status": 401,
+    "contentType": "text/plain; charset=utf-8",
+    "body": "no org id\n"
+  }
+}

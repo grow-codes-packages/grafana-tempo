@@ -1,0 +1,32 @@
+{
+  "function": "searchTags",
+  "case": "v1",
+  "request": {
+    "method": "GET",
+    "path": "/api/search/tags",
+    "query": {
+      "start": "1795034947",
+      "end": "1795035067"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "tagNames": [
+        "db.system.name",
+        "deployment.environment.name",
+        "grow weird.key",
+        "grow.note",
+        "grow.run",
+        "grow.seed",
+        "http.request.method",
+        "http.response.status_code",
+        "…trimmed 6 more"
+      ],
+      "metrics": {
+        "inspectedBytes": "29288"
+      }
+    }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "function": "getTrace",
+  "case": "mt-multi-tenant-header",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/traces/0af7651916cd43dd8448eb211c80319c",
+    "headers": {
+      "X-Scope-OrgID": "tenant-b|tenant-a"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "trace": {
+        "resourceSpans": [
+          {
+            "resource": {
+              "attributes": [
+                {
+                  "key": "deployment.environment.name",
+                  "value": {
+                    "stringValue": "test"
+                  }
+                },
+                "…trimmed 2 more"
+              ]
+            },
+            "scopeSpans": [
+              {
+                "scope": {
+                  "name": "grow-sdk-bootstrap",
+                  "version": "0.1.0"
+                },
+                "spans": [
+                  {
+                    "traceId": "CvdlGRbNQ92ESOshHIAxnA==",
+                    "spanId": "EAAAAAAAAAE=",
+                    "name": "GET /seed",
+                    "kind": "SPAN_KIND_SERVER",
+                    "startTimeUnixNano": "1795034968000000000",
+                    "endTimeUnixNano": "1795034969000000000",
+                    "attributes": [
+                      {
+                        "key": "grow.seed",
+                        "value": {
+                          "boolValue": true
+                        }
+                      },
+                      "…trimmed 2 more"
+                    ],
+                    "events": [
+                      {
+                        "timeUnixNano": "1795034968250000000",
+                        "name": "seed-event",
+                        "attributes": [
+                          {
+                            "key": "n",
+                            "value": {
+                              "intValue": "1"
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "status": {
+                      "code": "STATUS_CODE_OK"
+                    }
+                  },
+                  "…trimmed 1 more"
+                ]
+              }
+            ]
+          },
+          "…trimmed 1 more"
+        ]
+      },
+      "metrics": {
+        "inspectedBytes": "25064"
+      }
+    }
+  }
+}

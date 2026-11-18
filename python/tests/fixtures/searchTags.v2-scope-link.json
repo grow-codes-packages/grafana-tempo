@@ -1,0 +1,30 @@
+{
+  "function": "searchTags",
+  "case": "v2-scope-link",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/search/tags",
+    "query": {
+      "start": "1795034947",
+      "end": "1795035067",
+      "scope": "link"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "scopes": [
+        {
+          "name": "link",
+          "tags": [
+            "link.kind"
+          ]
+        }
+      ],
+      "metrics": {
+        "inspectedBytes": "25831"
+      }
+    }
+  }
+}

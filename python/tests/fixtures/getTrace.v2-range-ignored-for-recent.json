@@ -1,0 +1,174 @@
+{
+  "function": "getTrace",
+  "case": "v2-range-ignored-for-recent",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/traces/00f74bc1b058a1a8b85f9ae0231e4001",
+    "query": {
+      "start": "1795027807",
+      "end": "1795031407"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "trace": {
+        "resourceSpans": [
+          {
+            "resource": {
+              "attributes": [
+                {
+                  "key": "service.name",
+                  "value": {
+                    "stringValue": "grow-sdk-verify-179503498127460-api"
+                  }
+                },
+                {
+                  "key": "service.version",
+                  "value": {
+                    "stringValue": "9.9.9"
+                  }
+                }
+              ]
+            },
+            "scopeSpans": [
+              {
+                "scope": {
+                  "name": "grow-sdk-verify"
+                },
+                "spans": [
+                  {
+                    "traceId": "APdLwbBYoai4X5rgIx5AAQ==",
+                    "spanId": "oAAAAAAAAAE=",
+                    "name": "GET /orders",
+                    "kind": "SPAN_KIND_SERVER",
+                    "startTimeUnixNano": "1795035005729668338",
+                    "endTimeUnixNano": "1795035006179668338",
+                    "attributes": [
+                      {
+                        "key": "http.request.method",
+                        "value": {
+                          "stringValue": "GET"
+                        }
+                      },
+                      {
+                        "key": "http.response.status_code",
+                        "value": {
+                          "intValue": "200"
+                        }
+                      },
+                      {
+                        "key": "grow.note",
+                        "value": {
+                          "stringValue": "a \"quoted\" \\ value ü"
+                        }
+                      },
+                      {
+                        "key": "grow weird.key",
+                        "value": {
+                          "stringValue": "x y"
+                        }
+                      },
+                      {
+                        "key": "grow.run",
+                        "value": {
+                          "stringValue": "179503498127460"
+                        }
+                      }
+                    ],
+                    "events": [
+                      {
+                        "timeUnixNano": "1795035005730668338",
+                        "name": "cache-miss"
+                      }
+                    ],
+                    "status": {
+                      "code": "STATUS_CODE_OK"
+                    }
+                  },
+                  {
+                    "traceId": "APdLwbBYoai4X5rgIx5AAQ==",
+                    "spanId": "oAAAAAAAAAI=",
+                    "parentSpanId": "oAAAAAAAAAE=",
+                    "name": "load order",
+                    "kind": "SPAN_KIND_INTERNAL",
+                    "startTimeUnixNano": "1795035005734668338",
+                    "endTimeUnixNano": "1795035006034668338",
+                    "attributes": [
+                      {
+                        "key": "grow.run",
+                        "value": {
+                          "stringValue": "179503498127460"
+                        }
+                      }
+                    ],
+                    "status": {}
+                  },
+                  {
+                    "traceId": "APdLwbBYoai4X5rgIx5AAQ==",
+                    "spanId": "oAAAAAAAAAM=",
+                    "parentSpanId": "oAAAAAAAAAE=",
+                    "name": "render",
+                    "kind": "SPAN_KIND_INTERNAL",
+                    "startTimeUnixNano": "1795035006049668338",
+                    "endTimeUnixNano": "1795035006069668338",
+                    "attributes": [
+                      {
+                        "key": "grow.run",
+                        "value": {
+                          "stringValue": "179503498127460"
+                        }
+                      }
+                    ],
+                    "status": {}
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "resource": {
+              "attributes": [
+                {
+                  "key": "service.name",
+                  "value": {
+                    "stringValue": "grow-sdk-verify-179503498127460-db"
+                  }
+                }
+              ]
+            },
+            "scopeSpans": [
+              {
+                "scope": {
+                  "name": "grow-sdk-verify"
+                },
+                "spans": [
+                  {
+                    "traceId": "APdLwbBYoai4X5rgIx5AAQ==",
+                    "spanId": "oAAAAAAAAAQ=",
+                    "parentSpanId": "oAAAAAAAAAI=",
+                    "name": "SELECT orders",
+                    "kind": "SPAN_KIND_SERVER",
+                    "startTimeUnixNano": "1795035005739668338",
+                    "endTimeUnixNano": "1795035005989668338",
+                    "attributes": [
+                      {
+                        "key": "db.system.name",
+                        "value": {
+                          "stringValue": "postgresql"
+                        }
+                      }
+                    ],
+                    "status": {}
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "metrics": {}
+    }
+  }
+}
