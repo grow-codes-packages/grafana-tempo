@@ -1,0 +1,13 @@
+{
+  "function": "getTrace",
+  "case": "v1-invalid-id",
+  "request": {
+    "method": "GET",
+    "path": "/api/traces/nothex"
+  },
+  "response": {
+    "status": 400,
+    "contentType": "text/plain; charset=utf-8",
+    "body": "trace IDs can only contain hex characters: invalid character 'n' at position 1"
+  }
+}

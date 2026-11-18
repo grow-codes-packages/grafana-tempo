@@ -1,0 +1,27 @@
+{
+  "function": "searchTagValues",
+  "case": "v2-quoted-tag-path",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/search/tag/span.%22grow%20weird.key%22/values",
+    "query": {
+      "start": "1795034947",
+      "end": "1795035067"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "tagValues": [
+        {
+          "type": "string",
+          "value": "x y"
+        }
+      ],
+      "metrics": {
+        "inspectedBytes": "26391"
+      }
+    }
+  }
+}

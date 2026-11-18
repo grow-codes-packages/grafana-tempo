@@ -1,0 +1,23 @@
+{
+  "function": "searchTagValues",
+  "case": "mt-wrong-tenant",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/search/tag/resource.service.name/values",
+    "query": {
+      "start": "1795034947",
+      "end": "1795035067"
+    },
+    "headers": {
+      "X-Scope-OrgID": "tenant-b"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "tagValues": [],
+      "metrics": {}
+    }
+  }
+}
