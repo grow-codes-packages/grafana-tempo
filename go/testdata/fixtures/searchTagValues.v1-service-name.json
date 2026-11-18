@@ -1,0 +1,29 @@
+{
+  "function": "searchTagValues",
+  "case": "v1-service-name",
+  "request": {
+    "method": "GET",
+    "path": "/api/search/tag/service.name/values",
+    "query": {
+      "start": "1795034947",
+      "end": "1795035067"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "tagValues": [
+        "grow-sdk-seed-api",
+        "grow-sdk-seed-db",
+        "grow-sdk-tg-grpc-179503498127460",
+        "grow-sdk-tg-httppb-179503498127460",
+        "grow-sdk-verify-179503498127460-api",
+        "grow-sdk-verify-179503498127460-db"
+      ],
+      "metrics": {
+        "inspectedBytes": "26525"
+      }
+    }
+  }
+}

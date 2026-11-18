@@ -1,0 +1,18 @@
+{
+  "function": "searchTags",
+  "case": "v2-scope-invalid-400",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/search/tags",
+    "query": {
+      "start": "1795034947",
+      "end": "1795035067",
+      "scope": "nope"
+    }
+  },
+  "response": {
+    "status": 400,
+    "contentType": "text/plain; charset=utf-8",
+    "body": "invalid scope: nope"
+  }
+}

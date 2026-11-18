@@ -1,0 +1,25 @@
+{
+  "function": "searchTraces",
+  "case": "duration-excludes",
+  "request": {
+    "method": "GET",
+    "path": "/api/search",
+    "query": {
+      "q": "{ resource.service.name = \"grow-sdk-verify-179503498127460-api\" && trace:duration > 1s }",
+      "start": "1795034947",
+      "end": "1795035067"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "traces": [],
+      "metrics": {
+        "inspectedBytes": "26002",
+        "completedJobs": 2,
+        "totalJobs": 2
+      }
+    }
+  }
+}

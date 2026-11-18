@@ -1,0 +1,20 @@
+{
+  "function": "buildInfo",
+  "case": "ok",
+  "request": {
+    "method": "GET",
+    "path": "/api/status/buildinfo"
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "version": "3.1.1",
+      "revision": "9db7df79d",
+      "branch": "HEAD",
+      "buildUser": "",
+      "buildDate": "",
+      "goVersion": "go1.27.3"
+    }
+  }
+}
