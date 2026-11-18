@@ -1,0 +1,73 @@
+# Grafana Tempo 3.1.1 for the grow-grafana-tempo SDK integration suite (GRO-1379).
+#
+# Image: built from docker/tempo/Dockerfile exactly like the Grow managed-stack template
+# `grafana-tempo` (alpine:3.24.4 + official tempo_3.1.1 release binary, SHA-256 pinned, same
+# tempo.yaml, same start command). Catalog tag: grafana/tempo:3.1.1 (distroless upstream image).
+#
+# Services (compose DNS names, no host ports published):
+#   grafana-tempo     single-tenant Tempo, exactly the template config
+#                     query API http://grafana-tempo:3200, OTLP gRPC grafana-tempo:4317,
+#                     OTLP HTTP http://grafana-tempo:4318/v1/traces
+#   grafana-tempo-mt  same image + -multitenancy.enabled=true (the ticket's "second run with
+#                     multi-tenancy on"); every request needs X-Scope-OrgID
+#   bootstrap         one-shot: waits for both, seeds one known trace per instance/tenant,
+#                     writes /bootstrap/env (volume `bootstrap`). Idempotent.
+#
+# Test containers need only GROW_GRAFANA_TEMPO_URL=http://grafana-tempo:3200 plus /bootstrap/env.
+# Tempo has no authentication; nothing here is a secret.
+
+x-tempo-healthcheck: &tempo-healthcheck
+  # /ready answers 503 "Ingester not ready: waiting for 15s after being ready" right after start.
+  test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3200/ready | grep -q '^ready'"]
+  interval: 3s
+  timeout: 3s
+  retries: 40
+  start_period: 10s
+
+services:
+  service:   # service under test (harness contract); reachable as `grafana-tempo`
+    networks:
+      default:
+        aliases: [grafana-tempo]
+    image: grow-sdk/grafana-tempo:3.1.1-alpine3.24.4
+    build:
+      context: ./tempo
+    volumes:
+      - tempo-data:/var/tempo
+    healthcheck: *tempo-healthcheck
+
+  grafana-tempo-mt:
+    image: grow-sdk/grafana-tempo:3.1.1-alpine3.24.4
+    build:
+      context: ./tempo
+    environment:
+      TEMPO_EXTRA_ARGS: -multitenancy.enabled=true
+    volumes:
+      - tempo-mt-data:/var/tempo
+    healthcheck: *tempo-healthcheck
+
+  bootstrap:
+    image: curlimages/curl:8.23.0
+    user: "0:0"
+    depends_on:
+      service:
+        condition: service_healthy
+      grafana-tempo-mt:
+        condition: service_healthy
+    environment:
+      TEMPO_URL: http://grafana-tempo:3200
+      TEMPO_OTLP_HTTP: http://grafana-tempo:4318
+      TEMPO_MT_URL: http://grafana-tempo-mt:3200
+      TEMPO_MT_OTLP_HTTP: http://grafana-tempo-mt:4318
+      TENANT_A: tenant-a
+      TENANT_B: tenant-b
+    entrypoint: ["/bin/sh", "/bootstrap-scripts/bootstrap.sh"]
+    volumes:
+      - ./bootstrap:/bootstrap-scripts:ro
+      - bootstrap:/bootstrap
+    restart: "no"
+
+volumes:
+  tempo-data:
+  tempo-mt-data:
+  bootstrap:
