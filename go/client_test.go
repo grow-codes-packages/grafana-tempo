@@ -10,22 +10,6 @@ import (
 	"time"
 )
 
-// newTestClient builds a client for url with fast retries; mutate adjusts the config.
-// (Also used by the generated TLS tests.)
-func newTestClient(t *testing.T, url string, mutate func(*Config)) *Client {
-	t.Helper()
-	cfg := Config{CommonConfig: CommonConfig{URL: url, Retry: fastRetry(3)}, Token: NewSecret(testToken)}
-	if mutate != nil {
-		mutate(&cfg)
-	}
-	c, err := NewClient(cfg)
-	if err != nil {
-		t.Fatalf("NewClient: %v", err)
-	}
-	t.Cleanup(func() { _ = c.Close() })
-	return c
-}
-
 func TestClientConfig(t *testing.T) {
 	t.Run("core.config.env-precedence", func(t *testing.T) {
 		env := map[string]string{
@@ -248,7 +232,7 @@ func TestClientSurface(t *testing.T) {
 		if _, err := newTempo(t, broken.URL, nil).ServerVersion(t.Context()); !errors.Is(err, ErrPermissionDenied) {
 			t.Fatalf("status/version 403: %v", err)
 		}
-		down := newTestServer(t, status(http.StatusInternalServerError))
+		down := newTestServer(t, statusHandler(http.StatusInternalServerError))
 		if _, err := newTempo(t, down.URL, func(cfg *Config) { cfg.Retry = fastRetry(0) }).ServerVersion(t.Context()); !errors.Is(err, ErrUnavailable) {
 			t.Fatalf("500: %v", err)
 		}

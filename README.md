@@ -380,7 +380,7 @@ Licensed under the [Apache License, Version 2.0](LICENSE). See [NOTICE](NOTICE) 
 ## Trademarks and disclaimer
 
 This is an independent, community-maintained project. It is **not affiliated with, endorsed or
-sponsored by Grafana Labs**. Grafana Tempo is a trademark of Grafana Labs; it is used here only to name the
+sponsored by its owner (Grafana Labs)**. Grafana Tempo is a trademark of Grafana Labs; it is used here only to name the
 service this SDK connects to. The Grafana Tempo server is licensed separately by its owner
 (AGPL-3.0-only, with Apache-2.0 exceptions (`pkg/tempopb`, `operations/`)).
 

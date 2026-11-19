@@ -421,11 +421,11 @@ func TestProbes(t *testing.T) {
 		t.Fatalf("client buildinfo %+v %v", ci, err)
 	}
 
-	starting := newTestServer(t, status(http.StatusServiceUnavailable))
+	starting := newTestServer(t, statusHandler(http.StatusServiceUnavailable))
 	if ok, err := newTempo(t, starting.URL, nil).Query().Ready(t.Context()); err != nil || ok {
 		t.Fatalf("503: %v %v", ok, err)
 	}
-	teapot := newTestServer(t, status(http.StatusTeapot))
+	teapot := newTestServer(t, statusHandler(http.StatusTeapot))
 	if _, err := newTempo(t, teapot.URL, nil).Query().Ready(t.Context()); !errors.Is(err, ErrValidation) {
 		t.Fatalf("418: %v", err)
 	}
@@ -478,7 +478,7 @@ func TestTraceQueryClient(t *testing.T) {
 		if _, err := q.SearchTraces(t.Context(), TraceSearchQuery{Tags: map[string]string{"": "x"}}); !errors.Is(err, ErrValidation) {
 			t.Fatalf("empty tag: %v", err)
 		}
-		bad := newTestServer(t, status(http.StatusBadRequest))
+		bad := newTestServer(t, statusHandler(http.StatusBadRequest))
 		if _, err := newTempo(t, bad.URL, nil).Query().SearchTraces(t.Context(), TraceSearchQuery{}); !errors.Is(err, ErrValidation) {
 			t.Fatalf("400: %v", err)
 		}
