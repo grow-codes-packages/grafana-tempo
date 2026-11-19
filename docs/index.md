@@ -39,5 +39,5 @@ Start with [Install](install.md) and the [Quickstart](quickstart.md).
 
 !!! note "Independent project"
     This SDK is made by [Grow Codes](https://grow.codes). Grafana Tempo is a trademark of
-    Grafana Labs. This project is not affiliated with or endorsed by Grafana Labs. See
+    its owner (Grafana Labs); this project is not affiliated with or endorsed by it. See
     [License & disclaimer](license.md).

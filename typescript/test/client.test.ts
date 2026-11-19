@@ -353,7 +353,7 @@ describe("TempoClient", () => {
     await client.health();
     await client.close();
     await client.close();
-    await expect(client.ping()).rejects.toMatchObject({ code: "CONFIG" });
+    await expect(client.ping()).rejects.toMatchObject({ code: "CANCELLED" });
   });
 
   it("fromEnv builds from GROW_* variables", async () => {

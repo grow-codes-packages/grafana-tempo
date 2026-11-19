@@ -310,6 +310,8 @@ fn http_client(tls: &TlsConfig, timeout: Duration) -> Result<reqwest::Client> {
         .map_err(|e| Error::config("cannot build the OTLP HTTP client").with_source(e))
 }
 
+// gRPC TLS needs the `otlp-tls` crate feature (default; opentelemetry-otlp `tls-roots`).
+#[cfg(feature = "otlp-tls")]
 fn grpc_tls(
     tls: &TlsConfig,
 ) -> Result<opentelemetry_otlp::tonic_types::transport::ClientTlsConfig> {
@@ -338,6 +340,8 @@ fn grpc_tls(
 /// - `grpc`: OTLP/gRPC to the endpoint (default `http://127.0.0.1:4317`), headers as gRPC
 ///   metadata (`x-scope-orgid`); `https` endpoints or TLS options use TLS with the system roots
 ///   (`insecure_skip_verify` is `CONFIG`: tonic cannot skip verification).
+///   TLS for gRPC needs the crate feature `otlp-tls` (on by default); without it `https`
+///   endpoints or TLS options are `CONFIG`.
 ///
 /// Compression (gzip) and the export timeout apply to both.
 pub fn tempo_exporter(config: &TracingConfig) -> Result<SpanExporter> {
@@ -363,7 +367,14 @@ pub fn tempo_exporter(config: &TracingConfig) -> Result<SpanExporter> {
             .with_metadata(MetadataMap::from_headers(headers))
             .with_endpoint(endpoint.clone());
         if endpoint.starts_with("https://") || config.tls.is_some() {
-            b = b.with_tls_config(grpc_tls(&config.tls.clone().unwrap_or_default())?);
+            #[cfg(feature = "otlp-tls")]
+            {
+                b = b.with_tls_config(grpc_tls(&config.tls.clone().unwrap_or_default())?);
+            }
+            #[cfg(not(feature = "otlp-tls"))]
+            return Err(Error::config(
+                "tracing: TLS for grpc needs the crate feature \"otlp-tls\"; use http/protobuf",
+            ));
         }
         if gzip {
             b = b.with_compression(opentelemetry_otlp::Compression::Gzip);
