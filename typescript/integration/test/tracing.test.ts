@@ -304,6 +304,17 @@ describe("search, tags and metrics (visible after ~30 s)", () => {
     });
     assert.ok(errors.traces.some((t) => t.traceId === traceId));
     await assert.rejects(query.search({ traceql: "{ bad" }), { code: "VALIDATION" });
+    // Structural operator: the root span has a direct child "load order".
+    const structural = await query.search({
+      traceql: TraceQL.span({ "resource.service.name": SERVICE, name: "GET /orders" }).child(
+        TraceQL.span({ name: "load order" }),
+      ),
+      ...range(),
+    });
+    assert.ok(
+      structural.traces.some((t) => t.traceId === traceId),
+      "structural child query matches",
+    );
   });
 
   test("searchTraces maps service/operation/tags/duration to TraceQL", async () => {

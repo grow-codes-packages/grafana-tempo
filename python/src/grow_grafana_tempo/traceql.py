@@ -131,6 +131,11 @@ class TraceQL:
             query = query.and_(field, "=", value)
         return query
 
+    @classmethod
+    def where(cls, field: str, op: TraceQLOperator | str, value: TraceQLValue) -> TraceQL:
+        """Start a span-set filter with one condition: ``{ <field> <op> <value> }``."""
+        return cls().and_(field, op, value)
+
     @staticmethod
     def field(name: str) -> str:
         """Render a field name: validate the scope or intrinsic and quote odd attribute names."""

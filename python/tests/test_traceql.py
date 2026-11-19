@@ -97,6 +97,9 @@ def test_structural_and_select() -> None:
     assert " < " in str(parent.parent(child))
     assert " << " in str(parent.ancestor(child))
     assert " ~ " in str(parent.sibling(child))
+    assert str(TraceQL.where("duration", ">=", "1s").descendant(child)) == (
+        '{ span:duration >= 1s } >> { resource.service.name = "db" }'
+    )
     nested = parent.structural("&&", TraceQL.span().descendant(TraceQL.span()))
     assert str(nested) == '{ resource.service.name = "api" } && {} >> {}'
     assert str(parent.select("name", "status")).endswith("| select(name, status)")

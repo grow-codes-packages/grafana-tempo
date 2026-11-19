@@ -54,12 +54,12 @@ export class TempoClient {
     this.#transport = new HttpTransport({
       ...internals,
       config: cfg,
-      defaultHeaders: () => cfg.tenantHeaders(),
+      defaultHeaders: () => cfg.requestHeaders(),
       knownSecrets: () => cfg.knownSecrets(),
     });
   }
 
-  /** Builds a client from `GROW_GRAFANA_TEMPO_*` (then `TEMPO_URL`, `TEMPO_TENANT_ID`). */
+  /** Builds a client from `GROW_GRAFANA_TEMPO_*` (then `TEMPO_URL`, `TEMPO_TENANT_ID`, `GROW_TEMPO_*`). */
   static fromEnv(overrides: TempoConfigOptions = {}): TempoClient {
     return new TempoClient(TempoConfig.fromEnv(overrides));
   }

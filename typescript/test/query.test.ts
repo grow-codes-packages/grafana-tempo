@@ -191,14 +191,14 @@ describe("search", () => {
     });
   });
 
-  it("returns span names when selected and defaults the query to {}", async () => {
+  it("returns span names when selected and sends no q without a query", async () => {
     const { s, q } = await setup({ "/api/search": "search.select-name-status" });
     const res = await q.search();
-    expect(parse(s.requests[0]!).query.get("q")).toBe("{}");
+    expect(parse(s.requests[0]!).query.has("q")).toBe(false);
     expect(parse(s.requests[0]!).query.has("limit")).toBe(false);
     expect(res.traces[0]!.spanSets[0]!.spans.some((sp) => sp.name !== undefined)).toBe(true);
     await q.search({ traceql: "  " });
-    expect(parse(s.requests[1]!).query.get("q")).toBe("{}");
+    expect(parse(s.requests[1]!).query.has("q")).toBe(false);
   });
 
   it("handles a legacy spanSet-only answer and empty fields", async () => {

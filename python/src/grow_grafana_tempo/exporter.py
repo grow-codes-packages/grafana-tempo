@@ -19,7 +19,13 @@ from opentelemetry.sdk.trace.export import SpanExporter
 from opentelemetry.sdk.trace.id_generator import IdGenerator
 
 from ._core import ConfigError, EnvReader, TlsConfig
-from ._tracing import PropagatorFactory, TracingConfig, TracingHandle, init_tracing_with
+from ._tracing import (
+    SAMPLERS,
+    PropagatorFactory,
+    TracingConfig,
+    TracingHandle,
+    init_tracing_with,
+)
 from .config import TENANT_HEADER, validate_tenant_id
 
 __all__ = [
@@ -39,6 +45,7 @@ DEFAULT_OTLP_GRPC_ENDPOINT = "http://127.0.0.1:4317"
 
 _PROTOCOLS = ("grpc", "http/protobuf", "native")
 _TENANT_VARS = ("TEMPO_TENANT_ID", "GROW_TEMPO_TENANT_ID")
+_DEFAULT_SAMPLER = "parentbased_always_on"
 
 
 def parse_key_value_list(text: str, variable: str) -> dict[str, str]:
@@ -98,6 +105,11 @@ def tempo_tracing_config(
     - ``headers``: ``OTEL_EXPORTER_OTLP_TRACES_HEADERS`` > ``OTEL_EXPORTER_OTLP_HEADERS``, under
       the explicit headers;
     - ``service_name``: ``OTEL_SERVICE_NAME`` > ``service.name`` in ``OTEL_RESOURCE_ATTRIBUTES``;
+    - ``compression``: ``GROW_GRAFANA_TEMPO_OTLP_COMPRESSION`` >
+      ``OTEL_EXPORTER_OTLP_TRACES_COMPRESSION`` > ``OTEL_EXPORTER_OTLP_COMPRESSION`` (``gzip`` or
+      ``none``; applies while ``compression`` is the default ``gzip``);
+    - ``sampler`` / ``sampler_ratio``: ``OTEL_TRACES_SAMPLER`` / ``OTEL_TRACES_SAMPLER_ARG``
+      (while they hold the defaults ``parentbased_always_on`` / ``1.0``);
     - tenant: ``tenant_id`` > ``GROW_GRAFANA_TEMPO_TENANT_ID`` > ``TEMPO_TENANT_ID`` >
       ``GROW_TEMPO_TENANT_ID``; it becomes the ``X-Scope-OrgID`` header.
 
@@ -154,6 +166,32 @@ def tempo_tracing_config(
         resource = parse_key_value_list(resource_var[1], resource_var[0]) if resource_var else {}
         name = _env_value(environ, "OTEL_SERVICE_NAME")
         explicit["service_name"] = name[1] if name else resource.get("service.name", "")
+
+    # compression and the sampler come from the environment while they hold the defaults
+    # (a TracingConfig always carries a value for them), unless passed as keyword fields.
+    if "compression" not in fields and explicit.get("compression", "gzip") == "gzip":
+        found = reader.lookup("OTLP_COMPRESSION") or _first_env(
+            environ,
+            ("OTEL_EXPORTER_OTLP_TRACES_COMPRESSION", "OTEL_EXPORTER_OTLP_COMPRESSION"),
+        )
+        if found is not None:
+            value = found[1].strip().lower()
+            if value not in ("gzip", "none"):
+                raise ConfigError(f"config: invalid {found[0]}: expected gzip or none")
+            explicit["compression"] = value
+    if "sampler" not in fields and explicit.get("sampler", _DEFAULT_SAMPLER) == _DEFAULT_SAMPLER:
+        found = _env_value(environ, "OTEL_TRACES_SAMPLER")
+        if found is not None:
+            if found[1].lower() not in SAMPLERS:
+                raise ConfigError(f"config: invalid {found[0]}: unsupported sampler")
+            explicit["sampler"] = found[1].lower()
+    if "sampler_ratio" not in fields and explicit.get("sampler_ratio", 1.0) == 1.0:
+        found = _env_value(environ, "OTEL_TRACES_SAMPLER_ARG")
+        if found is not None:
+            try:
+                explicit["sampler_ratio"] = float(found[1])
+            except ValueError:
+                raise ConfigError(f"config: invalid {found[0]}: not a number") from None
 
     tenant = tenant_id if tenant_id is not None else reader.string("TENANT_ID", _TENANT_VARS)
     if tenant is not None:

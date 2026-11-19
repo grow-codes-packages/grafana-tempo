@@ -132,7 +132,44 @@ describe("tempoTracingConfig", () => {
       { OTEL_EXPORTER_OTLP_TRACES_HEADERS: "k=%E0%A4%A-secret" },
       "OTEL_EXPORTER_OTLP_TRACES_HEADERS",
     );
+    bad({ OTEL_EXPORTER_OTLP_COMPRESSION: "brotli-secret" }, "OTEL_EXPORTER_OTLP_COMPRESSION");
+    bad({ OTEL_TRACES_SAMPLER: "jaeger_remote-secret" }, "OTEL_TRACES_SAMPLER");
+    bad({ OTEL_TRACES_SAMPLER_ARG: "half-secret" }, "OTEL_TRACES_SAMPLER_ARG");
     expect(() => tempoTracingConfig({ tenantId: "bad tenant" }, {})).toThrow(ConfigError);
+  });
+
+  it("reads compression, sampler and the GROW_TEMPO_TENANT_ID alias from the environment", () => {
+    const c = tempoTracingConfig(
+      {},
+      {
+        GROW_GRAFANA_TEMPO_OTLP_COMPRESSION: "NONE",
+        OTEL_EXPORTER_OTLP_COMPRESSION: "gzip",
+        OTEL_TRACES_SAMPLER: "traceidratio",
+        OTEL_TRACES_SAMPLER_ARG: "0.25",
+        GROW_TEMPO_TENANT_ID: "alias-tenant",
+      },
+    );
+    expect(c.compression).toBe("none");
+    expect(c.sampler).toBe("traceidratio");
+    expect(c.samplerRatio).toBe(0.25);
+    expect(c.tenantId).toBe("alias-tenant");
+    expect(c.headers?.["X-Scope-OrgID"]).toBe("alias-tenant");
+    const traces = tempoTracingConfig({}, { OTEL_EXPORTER_OTLP_TRACES_COMPRESSION: "gzip" });
+    expect(traces.compression).toBe("gzip");
+    const explicit = tempoTracingConfig(
+      { compression: "gzip", sampler: "always_off", samplerRatio: 1 },
+      {
+        OTEL_EXPORTER_OTLP_COMPRESSION: "none",
+        OTEL_TRACES_SAMPLER: "always_on",
+        OTEL_TRACES_SAMPLER_ARG: "0.5",
+        TEMPO_TENANT_ID: "vendor",
+        GROW_TEMPO_TENANT_ID: "alias",
+      },
+    );
+    expect(explicit.compression).toBe("gzip");
+    expect(explicit.sampler).toBe("always_off");
+    expect(explicit.samplerRatio).toBe(1);
+    expect(explicit.tenantId).toBe("vendor");
   });
 
   it("parses key=value lists", () => {

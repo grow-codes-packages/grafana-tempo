@@ -139,6 +139,15 @@ func TestTempo(t *testing.T) {
 		if info, err := q.BuildInfo(ctx); err != nil || info.Version != version || info.GoVersion == "" {
 			t.Fatalf("buildinfo %+v %v", info, err)
 		}
+		if s, err := client.Echo(ctx); err != nil || s != "echo" {
+			t.Fatalf("client echo %q %v", s, err)
+		}
+		if ok, err := client.Ready(ctx); err != nil || !ok {
+			t.Fatalf("client ready %v %v", ok, err)
+		}
+		if info, err := client.BuildInfo(ctx); err != nil || info.Version != version {
+			t.Fatalf("client buildinfo %+v %v", info, err)
+		}
 	})
 
 	t.Run("seed trace by id", func(t *testing.T) {

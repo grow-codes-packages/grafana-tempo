@@ -106,7 +106,10 @@ def test_search_variants() -> None:
     assert any(s.name for t in result.traces for ss in t.span_sets for s in ss.spans)
     router = Router().fixture("search.no-range")
     q(router).search()
-    assert router.params() == {"q": "{}"}
+    assert router.params() == {}
+    router = Router().fixture("search.no-range")
+    q(router).search("   ")
+    assert router.params() == {}
     router = Router().fixture("search.spss-1")
     result = q(router).search("{ }", spss=1)
     assert all(len(ss.spans) <= 1 for t in result.traces for ss in t.span_sets)

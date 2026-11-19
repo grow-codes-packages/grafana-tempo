@@ -410,6 +410,16 @@ func TestProbes(t *testing.T) {
 	if err != nil || info != (BuildInfo{Version: "3.1.1", Revision: "9db7df79d", Branch: "HEAD", GoVersion: "go1.27.3"}) {
 		t.Fatalf("buildinfo %+v %v", info, err)
 	}
+	c := newTempo(t, ts.URL, nil)
+	if s, err := c.Echo(t.Context()); err != nil || s != "echo" {
+		t.Fatalf("client echo %q %v", s, err)
+	}
+	if ok, err := c.Ready(t.Context()); err != nil || !ok {
+		t.Fatalf("client ready %v %v", ok, err)
+	}
+	if ci, err := c.BuildInfo(t.Context()); err != nil || ci != info {
+		t.Fatalf("client buildinfo %+v %v", ci, err)
+	}
 
 	starting := newTestServer(t, status(http.StatusServiceUnavailable))
 	if ok, err := newTempo(t, starting.URL, nil).Query().Ready(t.Context()); err != nil || ok {

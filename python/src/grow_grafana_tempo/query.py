@@ -463,9 +463,10 @@ def _search_params(
     limit: int | None,
     spss: int | None,
 ) -> dict[str, Any]:
-    q = traceql_text(traceql if traceql is not None else "{}").strip() or "{}"
+    # No TraceQL -> no ``q`` (Tempo then matches every trace), as in every language.
+    q = traceql_text(traceql).strip() if traceql is not None else ""
     return {
-        "q": q,
+        "q": q or None,
         **_range(start, end),
         "limit": _positive_int(limit, "search: limit"),
         "spss": _positive_int(spss, "search: spss"),
@@ -639,8 +640,8 @@ class TempoQueryClient(BaseTraceQueryClient):
         spss: int | None = None,
         cancel: CancelToken | None = None,
     ) -> TempoSearchResult:
-        """TraceQL search: ``GET /api/search?q=…&start&end&limit&spss`` (default query ``{}``).
-        Invalid TraceQL → :class:`ValidationError` (HTTP 400)."""
+        """TraceQL search: ``GET /api/search?q=…&start&end&limit&spss`` (no ``q`` without a
+        query). Invalid TraceQL → :class:`ValidationError` (HTTP 400)."""
         params = _search_params(traceql, start, end, limit, spss)
         return _search_result(
             self._get("/api/search", "search", params, cancel, unsupported_404=True)

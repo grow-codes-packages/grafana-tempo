@@ -51,12 +51,13 @@ public final class SearchRequest {
   }
 
   /**
-   * TraceQL query ({@code {}} when unset: every trace).
+   * TraceQL query, trimmed. Empty when unset or blank: the search then sends no {@code q} and Tempo
+   * matches every trace (same in every language).
    *
-   * @return query text
+   * @return query text, if set
    */
-  public String traceql() {
-    return traceql == null || traceql.isBlank() ? "{}" : traceql.trim();
+  public Optional<String> traceql() {
+    return traceql == null || traceql.isBlank() ? Optional.empty() : Optional.of(traceql.trim());
   }
 
   /**

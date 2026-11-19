@@ -96,6 +96,41 @@ def test_config_object_counts_as_explicit() -> None:
     assert keep.endpoint == "http://e:4317"
 
 
+def test_compression_sampler_and_alias_env() -> None:
+    env = {
+        P + "OTLP_COMPRESSION": "NONE",
+        "OTEL_EXPORTER_OTLP_COMPRESSION": "gzip",
+        "OTEL_TRACES_SAMPLER": "traceidratio",
+        "OTEL_TRACES_SAMPLER_ARG": "0.25",
+        "GROW_TEMPO_TENANT_ID": "alias-tenant",
+    }
+    cfg = sdk.tempo_tracing_config(service_name="s", env=env)
+    assert cfg.compression == "none"
+    assert cfg.sampler == "traceidratio" and cfg.sampler_ratio == 0.25
+    assert cfg.headers["X-Scope-OrgID"] == "alias-tenant"
+    traces = sdk.tempo_tracing_config(
+        service_name="s", env={"OTEL_EXPORTER_OTLP_TRACES_COMPRESSION": "none"}
+    )
+    assert traces.compression == "none"
+    kw = sdk.tempo_tracing_config(
+        service_name="s", compression="gzip", sampler="always_off", sampler_ratio=1.0, env=env
+    )
+    assert kw.compression == "gzip" and kw.sampler == "always_off" and kw.sampler_ratio == 1.0
+    obj = sdk.tempo_tracing_config(
+        sdk.TracingConfig(service_name="o", compression="none", sampler="always_on"),
+        env={"OTEL_EXPORTER_OTLP_COMPRESSION": "gzip", "OTEL_TRACES_SAMPLER": "always_off"},
+    )
+    assert obj.compression == "none" and obj.sampler == "always_on"
+    for var, value in (
+        ("OTEL_EXPORTER_OTLP_COMPRESSION", "brotli-secret"),
+        ("OTEL_TRACES_SAMPLER", "jaeger-secret"),
+        ("OTEL_TRACES_SAMPLER_ARG", "half-secret"),
+    ):
+        with pytest.raises(sdk.ConfigError) as info:
+            sdk.tempo_tracing_config(service_name="s", env={var: value})
+        assert var in str(info.value) and value not in str(info.value)
+
+
 def test_os_environ_default(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("OTEL_SERVICE_NAME", "env-svc")
     monkeypatch.setenv(P + "TENANT_ID", "t-env")

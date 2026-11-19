@@ -44,7 +44,11 @@ describe("TempoConfig", () => {
     expect(TempoConfig.from().url).toBe(c.url);
     const prefix = `GROW_${PACKAGE_KEY.toUpperCase().replaceAll("-", "_")}_`;
     expect(TempoConfig.ENV_PREFIX).toBe(prefix);
-    expect(VENDOR_ENV).toEqual({ url: ["TEMPO_URL"], tenantId: ["TEMPO_TENANT_ID"] });
+    expect(VENDOR_ENV.url).toEqual(["TEMPO_URL", "GROW_TEMPO_URL"]);
+    expect(VENDOR_ENV.tenantId).toEqual(["TEMPO_TENANT_ID", "GROW_TEMPO_TENANT_ID"]);
+    expect(VENDOR_ENV.token).toEqual(["GROW_TEMPO_TOKEN"]);
+    expect(c.token).toBeUndefined();
+    expect(c.requestHeaders()).toEqual({});
   });
 
   it("keeps optional settings and the tenant", () => {
@@ -132,6 +136,78 @@ describe("TempoConfig", () => {
     expect(err).toBeInstanceOf(ConfigError);
     expect((err as Error).message).toContain(`${prefix}TOTAL_TIMEOUT`);
     expect((err as Error).message).not.toContain("forever-and-secret");
+  });
+});
+
+describe("TempoConfig proxy token and GROW_TEMPO_* aliases", () => {
+  it("keeps the token redacted and sends it as Authorization: Bearer", () => {
+    const c = new TempoConfig({ token: "proxy-token-123", tenantId: "t" });
+    expect(c.token?.reveal()).toBe("proxy-token-123");
+    expect(c.knownSecrets()).toEqual(["proxy-token-123"]);
+    expect(c.requestHeaders()).toEqual({
+      [TENANT_HEADER]: "t",
+      Authorization: "Bearer proxy-token-123",
+    });
+    for (const form of [String(c), JSON.stringify(c), inspect(c)]) {
+      expect(form).not.toContain("proxy-token-123");
+    }
+    expect(c.toJSON().token).toBe(REDACTED);
+    expect(new TempoConfig().toJSON().token).toBeNull();
+    expect(() => new TempoConfig({ token: "  " })).toThrow(ConfigError);
+  });
+
+  it("env order: GROW_GRAFANA_TEMPO_* > TEMPO_* > GROW_TEMPO_*", () => {
+    const aliases = {
+      GROW_TEMPO_URL: "http://alias:1",
+      GROW_TEMPO_TENANT_ID: " alias-tenant ",
+      GROW_TEMPO_TOKEN: "alias-token",
+      GROW_TEMPO_CONNECT_TIMEOUT: "2s",
+      GROW_TEMPO_REQUEST_TIMEOUT: "3s",
+      GROW_TEMPO_TOTAL_TIMEOUT: "9s",
+      GROW_TEMPO_MAX_RETRIES: "4",
+      GROW_TEMPO_PROXY: "http://proxy:3128",
+      GROW_TEMPO_INSECURE_SKIP_VERIFY: "true",
+    };
+    const a = TempoConfig.fromEnv({}, aliases);
+    expect(a.url).toBe("http://alias:1");
+    expect(a.tenantId).toBe("alias-tenant");
+    expect(a.token?.reveal()).toBe("alias-token");
+    expect(a.connectTimeoutMs).toBe(2000);
+    expect(a.requestTimeoutMs).toBe(3000);
+    expect(a.totalTimeoutMs).toBe(9000);
+    expect(a.retry.maxRetries).toBe(4);
+    expect(a.proxy).toBe("http://proxy:3128");
+    expect(a.tls.insecureSkipVerify).toBe(true);
+
+    const vendor = TempoConfig.fromEnv(
+      {},
+      { ...aliases, TEMPO_URL: "http://vendor:2", TEMPO_TENANT_ID: "vendor-tenant" },
+    );
+    expect(vendor.url).toBe("http://vendor:2");
+    expect(vendor.tenantId).toBe("vendor-tenant");
+
+    const grow = TempoConfig.fromEnv(
+      {},
+      {
+        ...aliases,
+        TEMPO_URL: "http://vendor:2",
+        GROW_GRAFANA_TEMPO_URL: "http://grow:3",
+        GROW_GRAFANA_TEMPO_TOKEN: "grow-token",
+        GROW_GRAFANA_TEMPO_REQUEST_TIMEOUT: "5s",
+      },
+    );
+    expect(grow.url).toBe("http://grow:3");
+    expect(grow.token?.reveal()).toBe("grow-token");
+    expect(grow.requestTimeoutMs).toBe(5000);
+  });
+
+  it("the client sends the bearer token on every call", async () => {
+    const s = await serve(TEMPO_ROUTES);
+    const client = new TempoClient({ url: s.url, token: "proxy-token-xyz", ...fast });
+    await client.ping();
+    expect(s.requests[0]!.headers.authorization).toBe("Bearer proxy-token-xyz");
+    expect(String(client.config)).not.toContain("proxy-token-xyz");
+    await client.close();
   });
 });
 

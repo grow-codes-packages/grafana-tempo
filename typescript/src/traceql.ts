@@ -20,6 +20,20 @@ export const TRACEQL_OPERATORS: readonly TraceQLOperator[] = Object.freeze([
   "!~",
 ]);
 
+/** Span-set operators accepted by {@link TraceQL.structural}. */
+export type SpansetOperator = ">" | ">>" | "<" | "<<" | "~" | "&&" | "||";
+
+/** Every span-set operator {@link TraceQL.structural} accepts. */
+export const SPANSET_OPERATORS: readonly SpansetOperator[] = Object.freeze([
+  ">",
+  ">>",
+  "<",
+  "<<",
+  "~",
+  "&&",
+  "||",
+]);
+
 /** Attribute scopes (`resource.`, `span.`, …; a leading `.` means "span or resource"). */
 export const TRACEQL_SCOPES: readonly string[] = Object.freeze([
   "resource",
@@ -39,11 +53,15 @@ const BARE_INTRINSICS: ReadonlySet<string> = new Set([
   "rootName",
   "rootServiceName",
   "traceDuration",
+  "childCount",
+  "nestedSetLeft",
+  "nestedSetRight",
+  "nestedSetParent",
 ]);
 
-const SCOPED_INTRINSIC = /^(span|trace|event|link|instrumentation):[A-Za-z][A-Za-z0-9]*$/;
+const SCOPED_INTRINSIC = /^(span|trace|event|link|instrumentation):[A-Za-z][A-Za-z0-9_]*$/;
 const SCOPED_ATTRIBUTE = /^(resource|span|event|link|instrumentation)?\.(.+)$/s;
-const PLAIN_ATTRIBUTE = /^[A-Za-z0-9_][A-Za-z0-9_.\-/]*$/;
+const PLAIN_ATTRIBUTE = /^[A-Za-z0-9_][A-Za-z0-9_.]*$/;
 const DURATION_LITERAL = /^\d+(\.\d+)?(ns|us|µs|ms|s|m|h)$/;
 
 const DURATION_FIELDS: ReadonlySet<string> = new Set([
@@ -63,15 +81,26 @@ const KIND_WORDS: ReadonlySet<string> = new Set([
   "consumer",
 ]);
 
-/** Quotes a string as a TraceQL string literal: `"…"` with `\` and `"` escaped. */
+const ESCAPES: Readonly<Record<string, string>> = {
+  "\\": "\\\\",
+  '"': '\\"',
+  "\n": "\\n",
+  "\t": "\\t",
+  "\r": "\\r",
+};
+
+/**
+ * Quotes a string as a TraceQL string literal: `"…"` with `\`, `"`, newline, tab and carriage
+ * return escaped (other characters, including Unicode, pass through).
+ */
 function quote(text: string): string {
-  return `"${text.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
+  return `"${text.replace(/[\\"\n\t\r]/g, (ch) => ESCAPES[ch] ?? ch)}"`;
 }
 
 function attributeName(name: string, field: string): string {
   if (name.length >= 2 && name.startsWith('"') && name.endsWith('"')) {
     const inner = name.slice(1, -1);
-    if (/(^|[^\\])"/.test(inner)) {
+    if (/(^|[^\\])"/.test(inner) || inner.endsWith("\\")) {
       throw new ValidationError(`traceql: invalid quoted attribute name in "${field}"`);
     }
     return name;
@@ -86,8 +115,15 @@ interface Condition {
   readonly text: string;
 }
 
+/** One span-set filter and the span-set operator joining it to the previous one ("" first). */
+interface Part {
+  readonly op: SpansetOperator | "";
+  readonly conditions: readonly Condition[];
+}
+
 /**
- * Immutable TraceQL spanset builder with escaping.
+ * Immutable TraceQL builder with escaping: span-set filters, structural operators and
+ * `select()`.
  *
  * ```ts
  * TraceQL.span({ "resource.service.name": "api" })
@@ -95,20 +131,24 @@ interface Condition {
  *   .select("span.http.status_code")
  *   .toString();
  * // { resource.service.name = "api" && span:duration > 200ms } | select(span.http.status_code)
+ *
+ * TraceQL.span({ "resource.service.name": "api" }).child(TraceQL.span({ name: "db" })).toString();
+ * // { resource.service.name = "api" } > { name = "db" }
  * ```
  *
  * Field names are validated (unknown scopes or intrinsics throw `ValidationError`, because some
- * Tempo endpoints silently ignore an invalid query); attribute names with spaces or special
- * characters are quoted after the scope (`span."grow weird.key"`). String values are quoted and
- * escaped, except duration literals on duration fields (`200ms`), `ok|error|unset` on `status`
- * and span kinds on `kind`. Numbers and booleans are written as literals.
+ * Tempo endpoints silently ignore an invalid query); attribute names with anything outside
+ * `[A-Za-z0-9_.]` are quoted after the scope (`span."grow weird-key"`). String values are quoted
+ * and escaped (`\`, `"`, newline, tab, CR), except duration literals on duration fields
+ * (`200ms`), `ok|error|unset` on `status` and span kinds on `kind`. Numbers and booleans are
+ * written as literals; `=~` / `!~` need a string.
  */
 export class TraceQL {
-  readonly #conditions: readonly Condition[];
+  readonly #parts: readonly Part[];
   readonly #selects: readonly string[];
 
-  private constructor(conditions: readonly Condition[], selects: readonly string[]) {
-    this.#conditions = conditions;
+  private constructor(parts: readonly Part[], selects: readonly string[]) {
+    this.#parts = parts;
     this.#selects = selects;
   }
 
@@ -117,9 +157,14 @@ export class TraceQL {
    * in insertion order. `TraceQL.span()` alone matches every span (`{}`).
    */
   static span(filters: Readonly<Record<string, TraceQLValue>> = {}): TraceQL {
-    let q = new TraceQL([], []);
+    let q = new TraceQL([{ op: "", conditions: [] }], []);
     for (const [field, value] of Object.entries(filters)) q = q.and(field, "=", value);
     return q;
+  }
+
+  /** Starts a spanset filter with one condition: `{ <field> <op> <value> }`. */
+  static where(field: string, op: TraceQLOperator, value: TraceQLValue): TraceQL {
+    return TraceQL.span().and(field, op, value);
   }
 
   /** Renders a field name: validates the scope or intrinsic and quotes odd attribute names. */
@@ -164,39 +209,95 @@ export class TraceQL {
       throw new ValidationError(`traceql: unsupported operator "${op}"`);
     }
     const name = TraceQL.field(field);
-    const text = `${name} ${op} ${TraceQL.value(name, value)}`;
-    return new TraceQL([...this.#conditions, { join, text }], this.#selects);
+    let rendered: string;
+    if (op === "=~" || op === "!~") {
+      if (typeof value !== "string")
+        throw new ValidationError(`traceql: operator ${op} needs a string value`);
+      rendered = quote(value);
+    } else {
+      rendered = TraceQL.value(name, value);
+    }
+    const last = this.#parts[this.#parts.length - 1] as Part;
+    const parts: Part[] = [
+      ...this.#parts.slice(0, -1),
+      {
+        op: last.op,
+        conditions: [...last.conditions, { join, text: `${name} ${op} ${rendered}` }],
+      },
+    ];
+    return new TraceQL(parts, this.#selects);
   }
 
-  /** Adds `&& <field> <op> <value>` inside the spanset (returns a new builder). */
+  /** Adds `&& <field> <op> <value>` to the last spanset filter (returns a new builder). */
   and(field: string, op: TraceQLOperator, value: TraceQLValue): TraceQL {
     return this.#add("&&", field, op, value);
   }
 
-  /** Adds `|| <field> <op> <value>` inside the spanset (returns a new builder). */
+  /** Adds `|| <field> <op> <value>` to the last spanset filter (returns a new builder). */
   or(field: string, op: TraceQLOperator, value: TraceQLValue): TraceQL {
     return this.#add("||", field, op, value);
+  }
+
+  /**
+   * Joins `other`'s spanset filters with a span-set operator: `>` (child), `>>` (descendant),
+   * `<` (parent), `<<` (ancestor), `~` (sibling), `&&` / `||` (both / either). `other`'s
+   * `select()` is ignored.
+   */
+  structural(op: SpansetOperator, other: TraceQL): TraceQL {
+    if (!SPANSET_OPERATORS.includes(op)) {
+      throw new ValidationError(`traceql: unknown span-set operator "${op}"`);
+    }
+    if (!(other instanceof TraceQL)) {
+      throw new ValidationError("traceql: the span-set operand must be a TraceQL builder");
+    }
+    const joined = other.#parts.map((p, i) => (i === 0 ? { op, conditions: p.conditions } : p));
+    return new TraceQL([...this.#parts, ...joined], this.#selects);
+  }
+
+  /** `this > other`: spans of `other` that are direct children. */
+  child(other: TraceQL): TraceQL {
+    return this.structural(">", other);
+  }
+
+  /** `this >> other`: spans of `other` below `this` at any depth. */
+  descendant(other: TraceQL): TraceQL {
+    return this.structural(">>", other);
+  }
+
+  /** `this < other`: spans of `other` that are direct parents. */
+  parent(other: TraceQL): TraceQL {
+    return this.structural("<", other);
+  }
+
+  /** `this << other`: spans of `other` above `this` at any depth. */
+  ancestor(other: TraceQL): TraceQL {
+    return this.structural("<<", other);
+  }
+
+  /** `this ~ other`: spans of `other` with the same parent. */
+  sibling(other: TraceQL): TraceQL {
+    return this.structural("~", other);
   }
 
   /** Adds fields to `| select(…)` so search returns them on each matched span. */
   select(...fields: string[]): TraceQL {
     if (fields.length === 0) throw new ValidationError("traceql: select() needs a field");
-    return new TraceQL(this.#conditions, [
-      ...this.#selects,
-      ...fields.map((f) => TraceQL.field(f)),
-    ]);
+    return new TraceQL(this.#parts, [...this.#selects, ...fields.map((f) => TraceQL.field(f))]);
   }
 
   /** The TraceQL text. */
   toString(): string {
-    let body = "";
-    this.#conditions.forEach((c, i) => {
-      body += i === 0 ? c.text : ` ${c.join} ${c.text}`;
-    });
-    const spanset = body === "" ? "{}" : `{ ${body} }`;
-    return this.#selects.length === 0
-      ? spanset
-      : `${spanset} | select(${this.#selects.join(", ")})`;
+    const out: string[] = [];
+    for (const part of this.#parts) {
+      let body = "";
+      part.conditions.forEach((c, i) => {
+        body += i === 0 ? c.text : ` ${c.join} ${c.text}`;
+      });
+      const spanset = body === "" ? "{}" : `{ ${body} }`;
+      out.push(part.op === "" ? spanset : `${part.op} ${spanset}`);
+    }
+    const text = out.join(" ");
+    return this.#selects.length === 0 ? text : `${text} | select(${this.#selects.join(", ")})`;
   }
 
   /** Same as {@link toString} (so a builder serialises as its query text). */

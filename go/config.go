@@ -3,6 +3,7 @@ package tempo
 import (
 	"fmt"
 	"strings"
+	"time"
 )
 
 // DefaultURL is the default query API endpoint of Grafana Tempo (HTTP port 3200).
@@ -24,6 +25,17 @@ var vendorEnv = VendorEnv{
 	ClientKey:          []string{"GROW_TEMPO_CLIENT_KEY"},
 	InsecureSkipVerify: []string{"GROW_TEMPO_INSECURE_SKIP_VERIFY"},
 	Proxy:              []string{"GROW_TEMPO_PROXY"},
+}
+
+// vendorCommonAliases are the GROW_TEMPO_* aliases of the common settings that the
+// generated VendorEnv has no slot for (timeouts and retries).
+var vendorCommonAliases = struct {
+	ConnectTimeout, RequestTimeout, TotalTimeout, MaxRetries []string
+}{
+	ConnectTimeout: []string{"GROW_TEMPO_CONNECT_TIMEOUT"},
+	RequestTimeout: []string{"GROW_TEMPO_REQUEST_TIMEOUT"},
+	TotalTimeout:   []string{"GROW_TEMPO_TOTAL_TIMEOUT"},
+	MaxRetries:     []string{"GROW_TEMPO_MAX_RETRIES"},
 }
 
 // vendorTokenEnv lists vendor variables for the token, in precedence order.
@@ -60,6 +72,9 @@ func ConfigFromEnvWith(explicit Config, env map[string]string) (Config, error) {
 	r := NewEnvReader(EnvPrefix, env)
 	c := explicit
 	if err := c.applyEnv(r, vendorEnv); err != nil {
+		return Config{}, err
+	}
+	if err := c.applyAliasEnv(r); err != nil {
 		return Config{}, err
 	}
 	if c.Token.IsZero() {
@@ -121,3 +136,41 @@ func (c Config) String() string {
 
 // GoString renders the configuration with every credential redacted.
 func (c Config) GoString() string { return c.String() }
+
+// applyAliasEnv fills the timeouts and the retry count from their GROW_TEMPO_* aliases
+// when neither an explicit value nor GROW_GRAFANA_TEMPO_* set them.
+func (c *Config) applyAliasEnv(r *EnvReader) error {
+	durations := []struct {
+		dst     *time.Duration
+		name    string
+		aliases []string
+	}{
+		{&c.ConnectTimeout, "CONNECT_TIMEOUT", vendorCommonAliases.ConnectTimeout},
+		{&c.RequestTimeout, "REQUEST_TIMEOUT", vendorCommonAliases.RequestTimeout},
+		{&c.TotalTimeout, "TOTAL_TIMEOUT", vendorCommonAliases.TotalTimeout},
+	}
+	for _, d := range durations {
+		if *d.dst != 0 {
+			continue
+		}
+		v, ok, err := r.Duration(d.name, d.aliases...)
+		if err != nil {
+			return err
+		}
+		if ok {
+			*d.dst = v
+		}
+	}
+	if c.Retry == nil {
+		n, ok, err := r.Int("MAX_RETRIES", vendorCommonAliases.MaxRetries...)
+		if err != nil {
+			return err
+		}
+		if ok {
+			p := DefaultRetryPolicy()
+			p.MaxRetries = n
+			c.Retry = &p
+		}
+	}
+	return nil
+}

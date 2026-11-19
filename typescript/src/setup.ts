@@ -7,11 +7,12 @@ import { OTLPTraceExporter as OtlpProtoExporter } from "@opentelemetry/exporter-
 import { CompressionAlgorithm } from "@opentelemetry/otlp-exporter-base";
 import type { SpanExporter } from "@opentelemetry/sdk-trace-base";
 import { ConfigError, type EnvMap, EnvReader, type TlsOptions } from "./core/index.js";
-import { TENANT_HEADER, TempoConfig, validateTenantId } from "./config.js";
+import { TENANT_HEADER, TempoConfig, VENDOR_ENV, validateTenantId } from "./config.js";
 import {
   initTracingWith,
   type InitTracingOptions,
   type ResolvedTracingConfig,
+  type SamplerName,
   type SpanAttributes,
   type TracingConfig,
   type TracingHandle,
@@ -29,9 +30,10 @@ export interface TempoTracingConfig extends Omit<TracingConfig, "serviceName"> {
   serviceName?: string;
   /**
    * Tenant sent as `X-Scope-OrgID` header (HTTP) / `x-scope-orgid` metadata (gRPC) on export.
-   * Default `GROW_GRAFANA_TEMPO_TENANT_ID`, then `TEMPO_TENANT_ID`. A multi-tenant Tempo answers
-   * export without a tenant with HTTP 503 / gRPC `Unavailable`, which the exporter retries until
-   * it drops the spans, so set it whenever Tempo runs with multi-tenancy.
+   * Default `GROW_GRAFANA_TEMPO_TENANT_ID`, then `TEMPO_TENANT_ID`, then `GROW_TEMPO_TENANT_ID`.
+   * A multi-tenant Tempo answers export without a tenant with HTTP 503 / gRPC `Unavailable`,
+   * which the exporter retries until it drops the spans, so set it whenever Tempo runs with
+   * multi-tenancy.
    */
   tenantId?: string;
 }
@@ -43,6 +45,14 @@ export interface TempoTracingOptions extends Omit<InitTracingOptions, "defaults"
 }
 
 const PROTOCOLS: readonly string[] = ["grpc", "http/protobuf", "native"];
+const SAMPLERS: readonly string[] = [
+  "always_on",
+  "always_off",
+  "traceidratio",
+  "parentbased_always_on",
+  "parentbased_always_off",
+  "parentbased_traceidratio",
+];
 
 function envValue(env: EnvMap, name: string): { name: string; value: string } | undefined {
   const value = env[name]?.trim();
@@ -88,8 +98,11 @@ function appendTracesPath(endpoint: string): string {
  * field: explicit > `GROW_GRAFANA_TEMPO_OTLP_*` > `OTEL_EXPORTER_OTLP_TRACES_*` >
  * `OTEL_EXPORTER_OTLP_*` > default (`http/protobuf` to `http://127.0.0.1:4318`, or
  * `http://127.0.0.1:4317` for `grpc`). `OTEL_EXPORTER_OTLP_ENDPOINT` gets `/v1/traces`
- * appended for HTTP; `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` is used verbatim. The tenant becomes
- * an `X-Scope-OrgID` header. Throws `ConfigError` naming an invalid variable (never its value).
+ * appended for HTTP; `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` is used verbatim. Compression follows
+ * the same order (`…_OTLP_COMPRESSION`, `gzip` or `none`); the sampler comes from
+ * `OTEL_TRACES_SAMPLER` / `OTEL_TRACES_SAMPLER_ARG`. The tenant (`GROW_GRAFANA_TEMPO_TENANT_ID` >
+ * `TEMPO_TENANT_ID` > `GROW_TEMPO_TENANT_ID`) becomes an `X-Scope-OrgID` header. Throws
+ * `ConfigError` naming an invalid variable (never its value).
  */
 export function tempoTracingConfig(
   config: TempoTracingConfig = {},
@@ -146,7 +159,36 @@ export function tempoTracingConfig(
     envResource["service.name"] ??
     "";
 
-  const tenantId = config.tenantId ?? reader.string("TENANT_ID", ["TEMPO_TENANT_ID"]);
+  if (config.compression === undefined) {
+    const hit =
+      reader.lookup("OTLP_COMPRESSION") ??
+      firstEnv(env, ["OTEL_EXPORTER_OTLP_TRACES_COMPRESSION", "OTEL_EXPORTER_OTLP_COMPRESSION"]);
+    if (hit !== undefined) {
+      const value = hit.value.trim().toLowerCase();
+      if (value !== "gzip" && value !== "none")
+        throw new ConfigError(`invalid ${hit.name}: expected gzip or none`);
+      out.compression = value;
+    }
+  }
+  if (config.sampler === undefined) {
+    const hit = envValue(env, "OTEL_TRACES_SAMPLER");
+    if (hit !== undefined) {
+      const value = hit.value.trim().toLowerCase();
+      if (!SAMPLERS.includes(value))
+        throw new ConfigError(`invalid ${hit.name}: unsupported sampler`);
+      out.sampler = value as SamplerName;
+    }
+  }
+  if (config.samplerRatio === undefined) {
+    const hit = envValue(env, "OTEL_TRACES_SAMPLER_ARG");
+    if (hit !== undefined) {
+      const ratio = Number(hit.value);
+      if (!Number.isFinite(ratio)) throw new ConfigError(`invalid ${hit.name}: not a number`);
+      out.samplerRatio = ratio;
+    }
+  }
+
+  const tenantId = config.tenantId ?? reader.string("TENANT_ID", VENDOR_ENV.tenantId);
   if (tenantId !== undefined) {
     validateTenantId(tenantId);
     out.tenantId = tenantId;

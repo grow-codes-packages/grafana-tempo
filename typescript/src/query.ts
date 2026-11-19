@@ -358,13 +358,15 @@ export class TempoQueryClient extends BaseTraceQueryClient {
   }
 
   /**
-   * Runs a TraceQL search: `GET /api/search?q=…&start&end&limit&spss`. Trace ids come back
+   * Runs a TraceQL search: `GET /api/search?q=…&start&end&limit&spss` (no `q` without a query).
+   * Trace ids come back
    * padded to 32 hex characters. Invalid TraceQL → `ValidationError` (HTTP 400).
    */
   async search(options: TempoSearchOptions = {}): Promise<TempoSearchResult> {
-    const q = traceQLText(options.traceql ?? "{}").trim() || "{}";
+    // No TraceQL → no `q` (Tempo then matches every trace), as in every language.
+    const q = options.traceql === undefined ? "" : traceQLText(options.traceql).trim();
     const query: Record<string, QueryValue> = {
-      q,
+      ...(q === "" ? {} : { q }),
       ...rangeQuery(options),
       limit: positiveInt(options.limit, "search: limit"),
       spss: positiveInt(options.spss, "search: spss"),

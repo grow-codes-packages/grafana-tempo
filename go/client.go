@@ -56,6 +56,15 @@ func (c *Client) Config() Config { return c.cfg }
 // Query returns the Tempo query client (it implements TraceQueryClient).
 func (c *Client) Query() *QueryClient { return c.query }
 
+// BuildInfo is Query().BuildInfo: GET /api/status/buildinfo.
+func (c *Client) BuildInfo(ctx context.Context) (BuildInfo, error) { return c.query.BuildInfo(ctx) }
+
+// Echo is Query().Echo: GET /api/echo (no tenant needed).
+func (c *Client) Echo(ctx context.Context) (string, error) { return c.query.Echo(ctx) }
+
+// Ready is Query().Ready: true when GET /ready answers "ready", false during start-up.
+func (c *Client) Ready(ctx context.Context) (bool, error) { return c.query.Ready(ctx) }
+
 // headers returns the per-request headers: tenant and optional bearer token.
 func (c *Client) headers() http.Header {
 	h := http.Header{}

@@ -68,6 +68,25 @@ func TestClientConfig(t *testing.T) {
 		if _, err := ConfigFromEnvWith(Config{}, map[string]string{EnvPrefix + "TENANT_ID": "bad/tenant"}); !errors.Is(err, ErrConfig) {
 			t.Fatalf("invalid tenant: %v", err)
 		}
+		aliases := map[string]string{
+			"GROW_TEMPO_CONNECT_TIMEOUT": "2s", "GROW_TEMPO_REQUEST_TIMEOUT": "3s",
+			"GROW_TEMPO_TOTAL_TIMEOUT": "9s", "GROW_TEMPO_MAX_RETRIES": "4",
+		}
+		cfg, err = ConfigFromEnvWith(Config{}, aliases)
+		if err != nil || cfg.ConnectTimeout != 2*time.Second || cfg.RequestTimeout != 3*time.Second ||
+			cfg.TotalTimeout != 9*time.Second || cfg.Retry == nil || cfg.Retry.MaxRetries != 4 {
+			t.Fatalf("timeout/retry aliases: %v %s", err, cfg)
+		}
+		aliases[EnvPrefix+"REQUEST_TIMEOUT"] = "5s"
+		aliases[EnvPrefix+"MAX_RETRIES"] = "1"
+		if cfg, _ := ConfigFromEnvWith(Config{}, aliases); cfg.RequestTimeout != 5*time.Second || cfg.Retry.MaxRetries != 1 {
+			t.Fatalf("GROW_GRAFANA_TEMPO_* must beat the aliases: %s", cfg)
+		}
+		for _, bad := range []string{"GROW_TEMPO_CONNECT_TIMEOUT", "GROW_TEMPO_MAX_RETRIES"} {
+			if _, err := ConfigFromEnvWith(Config{}, map[string]string{bad: "nope-xyz"}); !errors.Is(err, ErrConfig) || strings.Contains(err.Error(), "nope-xyz") {
+				t.Fatalf("invalid alias %s: %v", bad, err)
+			}
+		}
 		t.Setenv(EnvPrefix+"URL", "http://process-env:9")
 		if cfg, err := ConfigFromEnv(); err != nil || cfg.URL != "http://process-env:9" {
 			t.Fatalf("process env: %v %s", err, cfg.URL)

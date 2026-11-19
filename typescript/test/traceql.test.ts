@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  SPANSET_OPERATORS,
   TRACEQL_OPERATORS,
   TRACEQL_SCOPES,
   TraceQL,
@@ -81,13 +82,53 @@ describe("TraceQL builder", () => {
     expect(TraceQL.field("trace:rootService")).toBe("trace:rootService");
     expect(TraceQL.field("rootServiceName")).toBe("rootServiceName");
     expect(TraceQL.field("link.kind")).toBe("link.kind");
-    expect(TraceQL.field("instrumentation.x-y/z")).toBe("instrumentation.x-y/z");
+    expect(TraceQL.field("instrumentation.x-y/z")).toBe('instrumentation."x-y/z"');
+    expect(TraceQL.field("span.http.status_code")).toBe("span.http.status_code");
+    expect(TraceQL.field("childCount")).toBe("childCount");
+    expect(TraceQL.field("span:parent_id")).toBe("span:parent_id");
     expect(TraceQL.field('span."already quoted"')).toBe('span."already quoted"');
     expect(TraceQL.field('span.a"b')).toBe('span."a\\"b"');
     expect(TraceQL.field("span.trailing.")).toBe('span."trailing."');
     expect(TraceQL.quote('a"b\\c')).toBe('"a\\"b\\\\c"');
     expect(TRACEQL_SCOPES).toContain("resource");
     expect(TRACEQL_OPERATORS).toHaveLength(8);
+  });
+
+  it("escapes control characters like the Go package", () => {
+    expect(TraceQL.quote('a"b\\c\nd\te\rf')).toBe('"a\\"b\\\\c\\nd\\te\\rf"');
+    expect(TraceQL.span({ "span.msg": "line1\nline2" }).toString()).toBe(
+      '{ span.msg = "line1\\nline2" }',
+    );
+    expect(TraceQL.field("span.a b")).toBe('span."a b"');
+    expect(() => TraceQL.field('span."ends\\"')).toThrow(ValidationError);
+    expect(() => TraceQL.span().and("name", "=~", 5 as unknown as string)).toThrow(/string value/);
+  });
+
+  it("joins spansets with structural operators", () => {
+    const api = TraceQL.span({ "resource.service.name": "api" });
+    const db = TraceQL.span({ name: "db" });
+    expect(api.child(db).toString()).toBe('{ resource.service.name = "api" } > { name = "db" }');
+    expect(api.descendant(db).toString()).toContain(" >> ");
+    expect(api.parent(db).toString()).toContain(" < ");
+    expect(api.ancestor(db).toString()).toContain(" << ");
+    expect(api.sibling(db).toString()).toContain(" ~ ");
+    expect(api.structural("&&", db).toString()).toContain(" && ");
+    expect(api.structural("||", TraceQL.span()).toString()).toBe(
+      '{ resource.service.name = "api" } || {}',
+    );
+    // conditions added after a join go to the last spanset; the other's select() is ignored
+    expect(
+      api.child(db.select("span.x")).and("status", "=", "error").select("name").toString(),
+    ).toBe('{ resource.service.name = "api" } > { name = "db" && status = error } | select(name)');
+    expect(api.child(db.child(TraceQL.span())).toString()).toBe(
+      '{ resource.service.name = "api" } > { name = "db" } > {}',
+    );
+    expect(TraceQL.where("duration", ">=", "1s").descendant(db).toString()).toBe(
+      '{ span:duration >= 1s } >> { name = "db" }',
+    );
+    expect(SPANSET_OPERATORS).toHaveLength(7);
+    expect(() => api.structural("=>" as ">", db)).toThrow(/span-set operator/);
+    expect(() => api.structural(">", "{}" as unknown as TraceQL)).toThrow(/operand/);
   });
 
   it("rejects unknown scopes, operators and values", () => {

@@ -221,13 +221,14 @@ class TempoQueryClientTest {
   void searchDefaultsLegacyShapesAndMetrics() {
     server.enqueue(Fixtures.replay("search.select-name-status"));
     SearchResult r = q.search(SearchRequest.of(null));
-    assertThat(lastUri()).isEqualTo("/api/search?q={}");
+    assertThat(lastUri()).isEqualTo("/api/search");
     assertThat(r.traces().get(0).spanSets().get(0).spans().get(0).name()).contains("GET /health");
     server.enqueue(
         200,
         "{\"traces\":[{\"traceID\":\"ab\",\"spanSet\":{\"spans\":[{\"spanID\":\"1\"}]}},{\"traceID\":\"cd\"}],"
             + "\"metrics\":{\"inspectedBytes\":\"12\",\"completedJobs\":2}}");
     r = q.search(SearchRequest.of("  "));
+    assertThat(lastUri()).isEqualTo("/api/search");
     assertThat(r.traces().get(0).traceId()).endsWith("00ab");
     assertThat(r.traces().get(0).spanSets().get(0).spans().get(0).spanId())
         .isEqualTo("0000000000000001");
@@ -237,7 +238,8 @@ class TempoQueryClientTest {
     assertThat(r.traces().get(1).rootServiceName()).isEmpty();
     assertThat(r.metrics()).containsEntry("inspectedBytes", 12L).containsEntry("completedJobs", 2L);
     server.enqueue(200, "");
-    assertThat(q.search(SearchRequest.of("{}")).traces()).isEmpty();
+    assertThat(q.search(SearchRequest.of(" {} ")).traces()).isEmpty();
+    assertThat(lastUri()).isEqualTo("/api/search?q={}");
   }
 
   @Test

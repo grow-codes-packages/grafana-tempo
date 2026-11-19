@@ -294,8 +294,8 @@ public final class TempoQueryClient implements TraceQueryClient, AutoCloseable {
   // ---------------------------------------------------------------- search
 
   /**
-   * Runs a TraceQL search: {@code GET /api/search?q=…&start&end&limit&spss}. Trace ids come back
-   * padded to 32 hex characters.
+   * Runs a TraceQL search: {@code GET /api/search?q=…&start&end&limit&spss} (no {@code q} without a
+   * query). Trace ids come back padded to 32 hex characters.
    *
    * @param request query, window and limits
    * @return matching traces
@@ -314,7 +314,7 @@ public final class TempoQueryClient implements TraceQueryClient, AutoCloseable {
   public CompletableFuture<SearchResult> searchAsync(SearchRequest request) {
     TransportRequest.Builder b = TransportRequest.get("/api/search");
     try {
-      b.query("q", request.traceql());
+      request.traceql().ifPresent(q -> b.query("q", q));
       range(b, request.start(), request.end());
       if (request.limit().isPresent()) {
         b.query("limit", positive(request.limit().getAsInt(), "search: limit"));
