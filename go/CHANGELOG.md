@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/grow-codes-packages/grafana-tempo/compare/go/v0.1.0...go/v0.1.1) (2026-11-19)
+
+
+### Bug Fixes
+
+* sync grafana-tempo to sdk-kit 0.3.0 (GRO-1379) ([#10](https://github.com/grow-codes-packages/grafana-tempo/issues/10)) ([e9b312e](https://github.com/grow-codes-packages/grafana-tempo/commit/e9b312e87e15ebd8e56b2d3fea6547fa579d8d0a))
+
 ## 0.1.0 (2026-11-19)
 
 
