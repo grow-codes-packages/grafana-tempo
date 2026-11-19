@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/grow-codes-packages/grafana-tempo/compare/java-v0.1.1...java-v0.1.2) (2026-11-19)
+
+
+### Dependencies
+
+* **java:** Bump the java group across 2 directories with 14 updates ([#12](https://github.com/grow-codes-packages/grafana-tempo/issues/12)) ([4411a8f](https://github.com/grow-codes-packages/grafana-tempo/commit/4411a8f1d5dc9b604a495105c1947a2b085ce11f))
+
 ## [0.1.1](https://github.com/grow-codes-packages/grafana-tempo/compare/java-v0.1.0...java-v0.1.1) (2026-11-19)
 
 
