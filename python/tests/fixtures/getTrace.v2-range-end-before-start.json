@@ -1,0 +1,17 @@
+{
+  "function": "getTrace",
+  "case": "v2-range-end-before-start",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/traces/00f74bc1b058a1a8b85f9ae0231e4001",
+    "query": {
+      "start": "1795035037",
+      "end": "1795034977"
+    }
+  },
+  "response": {
+    "status": 400,
+    "contentType": "text/plain; charset=utf-8",
+    "body": "http parameter start must be before end. received start=1795035037 end=1795034977"
+  }
+}

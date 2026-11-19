@@ -1,0 +1,23 @@
+{
+  "function": "searchTags",
+  "case": "v2-scope-instrumentation",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/search/tags",
+    "query": {
+      "start": "1795034947",
+      "end": "1795035067",
+      "scope": "instrumentation"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "scopes": [],
+      "metrics": {
+        "inspectedBytes": "25767"
+      }
+    }
+  }
+}

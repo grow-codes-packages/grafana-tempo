@@ -1,0 +1,91 @@
+{
+  "function": "search",
+  "case": "escaped-string-value",
+  "request": {
+    "method": "GET",
+    "path": "/api/search",
+    "query": {
+      "q": "{ resource.service.name = \"grow-sdk-verify-179503498127460-api\" && span.grow.note = \"a \\\"quoted\\\" \\\\ value ü\" }",
+      "start": "1795034947",
+      "end": "1795035067"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "traces": [
+        {
+          "traceID": "f74bc1b058a1a8b85f9ae0231e4001",
+          "rootServiceName": "grow-sdk-verify-179503498127460-api",
+          "rootTraceName": "GET /orders",
+          "startTimeUnixNano": "1795035005729668338",
+          "durationMs": 450,
+          "spanSet": {
+            "spans": [
+              {
+                "spanID": "a000000000000001",
+                "startTimeUnixNano": "1795035005729668338",
+                "durationNanos": "450000000",
+                "attributes": [
+                  {
+                    "key": "service.name",
+                    "value": {
+                      "stringValue": "grow-sdk-verify-179503498127460-api"
+                    }
+                  },
+                  {
+                    "key": "grow.note",
+                    "value": {
+                      "stringValue": "a \"quoted\" \\ value ü"
+                    }
+                  }
+                ]
+              }
+            ],
+            "matched": 1
+          },
+          "spanSets": [
+            {
+              "spans": [
+                {
+                  "spanID": "a000000000000001",
+                  "startTimeUnixNano": "1795035005729668338",
+                  "durationNanos": "450000000",
+                  "attributes": [
+                    {
+                      "key": "service.name",
+                      "value": {
+                        "stringValue": "grow-sdk-verify-179503498127460-api"
+                      }
+                    },
+                    {
+                      "key": "grow.note",
+                      "value": {
+                        "stringValue": "a \"quoted\" \\ value ü"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "matched": 1
+            }
+          ],
+          "serviceStats": {
+            "grow-sdk-verify-179503498127460-api": {
+              "spanCount": 3
+            },
+            "grow-sdk-verify-179503498127460-db": {
+              "spanCount": 1
+            }
+          }
+        }
+      ],
+      "metrics": {
+        "inspectedBytes": "29414",
+        "completedJobs": 2,
+        "totalJobs": 2
+      }
+    }
+  }
+}

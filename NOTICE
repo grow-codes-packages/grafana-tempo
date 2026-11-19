@@ -36,7 +36,16 @@ identification purposes only.
 The Grafana Tempo server itself is licensed separately by its owner:
 AGPL-3.0-only, with Apache-2.0 exceptions (`pkg/tempopb`, `operations/`).
 This SDK contains no Grafana Tempo server code; it talks to the service over its
-public network API.
+public network API (OTLP for ingest, the HTTP query API for reads). The response
+models are written by hand from the JSON that the public HTTP API returns; no
+Tempo source files, Go packages or protobuf definitions (including the
+Apache-2.0 pkg/tempopb definitions) are copied, generated from or linked into
+the packages. Trace data is exported with the OpenTelemetry OTLP exporters, whose
+protobuf definitions come from the OpenTelemetry project (Apache-2.0).
+
+The Docker integration harness (docker/tempo/Dockerfile, test-only, not part of
+any published package) downloads the official Grafana Tempo release binary
+(AGPL-3.0-only) at build time and runs it unmodified as a separate process.
 
 -------------------------------------------------------------------------------
 Third-party attributions
@@ -53,6 +62,22 @@ CC0-1.0, MPL-2.0). The full dependency lists and their licences are produced by
   go/          Go modules              (go-licenses)
   python/      PyPI dependencies       (pip-licenses)
   java/        Maven dependencies      (license-maven-plugin)
+
+Main runtime dependencies (all Apache-2.0 unless noted):
+
+  OpenTelemetry API, SDK and OTLP exporters for each language
+    (https://opentelemetry.io; JavaScript, Rust, Go, Python, Java SDKs),
+    Copyright The OpenTelemetry Authors.
+  typescript/  @grpc/grpc-js (Apache-2.0), undici (MIT)
+  rust/        reqwest, tokio, serde, tonic (via opentelemetry-otlp), url,
+               zeroize (MIT or Apache-2.0)
+  go/          google.golang.org/grpc (Apache-2.0); OpenTelemetry Go contrib
+               (otelhttp, b3 propagator)
+  python/      httpx (BSD-3-Clause); optional grpcio via the "grpc" extra
+               (Apache-2.0), requests (Apache-2.0)
+  java/        Jackson (Apache-2.0); optional Jakarta Servlet API (EPL-2.0 or
+               GPL-2.0 with Classpath Exception, compile-only / provided, not
+               bundled) and OkHttp (Apache-2.0)
 
 Code copied or adapted from other projects is listed below with its source,
 copyright and licence.

@@ -1,0 +1,13 @@
+{
+  "function": "getTrace",
+  "case": "v2-too-long-id",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/traces/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "response": {
+    "status": 400,
+    "contentType": "text/plain; charset=utf-8",
+    "body": "trace IDs can't be larger than 128 bits"
+  }
+}

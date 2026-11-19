@@ -1,0 +1,17 @@
+{
+  "function": "traceQLMetrics",
+  "case": "invalid-query-400",
+  "request": {
+    "method": "GET",
+    "path": "/api/metrics/query_range",
+    "query": {
+      "q": "{ } | nope()",
+      "since": "5m"
+    }
+  },
+  "response": {
+    "status": 400,
+    "contentType": "text/plain; charset=utf-8",
+    "body": "parse error at line 1, col 7: syntax error: unexpected IDENTIFIER"
+  }
+}

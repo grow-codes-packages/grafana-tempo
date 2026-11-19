@@ -1,0 +1,32 @@
+{
+  "function": "searchTagValues",
+  "case": "v2-int-typed",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/search/tag/span.http.response.status_code/values",
+    "query": {
+      "q": "{ resource.service.name = \"grow-sdk-verify-179503498127460-api\" }",
+      "start": "1795034947",
+      "end": "1795035067"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "tagValues": [
+        {
+          "type": "int",
+          "value": "200"
+        },
+        {
+          "type": "int",
+          "value": "503"
+        }
+      ],
+      "metrics": {
+        "inspectedBytes": "26259"
+      }
+    }
+  }
+}

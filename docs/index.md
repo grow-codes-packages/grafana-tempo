@@ -28,7 +28,12 @@ has the same functions, options, defaults, error codes and behaviour, tested aga
   ([Redaction](redaction.md)).
 - **Tracing**: OpenTelemetry setup, span helpers, propagation, framework adapters and trace
   queries ([Tracing](tracing.md)).
-- **Service functions** for the Grafana Tempo API ([Functions](functions.md)).
+- **Tempo query client**: trace by id (v2 with v1 fallback), TraceQL search, tags, tag values and
+  TraceQL metrics, with multi-tenancy (`X-Scope-OrgID`) built in ([Query client](functions/query.md)).
+- **TraceQL builder** with escaping, quoting and structural operators
+  ([TraceQL builder](functions/traceql.md)).
+- **`initTracing` preset** for Tempo's OTLP receivers (HTTP 4318 or gRPC 4317) with the tenant
+  header ([Tracing setup](functions/tracing-setup.md)).
 
 Start with [Install](install.md) and the [Quickstart](quickstart.md).
 

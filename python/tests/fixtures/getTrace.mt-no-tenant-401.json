@@ -1,0 +1,13 @@
+{
+  "function": "getTrace",
+  "case": "mt-no-tenant-401",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/traces/0af7651916cd43dd8448eb211c80319c"
+  },
+  "response": {
+    "status": 401,
+    "contentType": "text/plain; charset=utf-8",
+    "body": "no org id\n"
+  }
+}

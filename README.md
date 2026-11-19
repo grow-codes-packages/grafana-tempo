@@ -73,20 +73,32 @@ implementation("codes.grow.packages:grafana-tempo:0.1.0")
 ## Quickstart
 
 Every package reads its configuration from the environment (`GROW_GRAFANA_TEMPO_URL`,
-`GROW_GRAFANA_TEMPO_TOKEN`, …, see [Configuration](#configuration)) or from an explicit config
-object. The examples check the service health and make one authenticated call.
+`GROW_GRAFANA_TEMPO_TENANT_ID`, `GROW_GRAFANA_TEMPO_OTLP_ENDPOINT`, …, see
+[Configuration](#configuration)) or from an explicit config object. Tempo has two sides: spans go
+**in** over OTLP (`initTracing`, ports 4317/4318) and come **out** through the query API
+(`TempoClient`, port 3200). The examples send one span and read the trace back by id.
+
+```sh
+export GROW_GRAFANA_TEMPO_URL=http://127.0.0.1:3200            # query API
+export GROW_GRAFANA_TEMPO_OTLP_ENDPOINT=http://127.0.0.1:4318  # OTLP/HTTP receiver
+# export GROW_GRAFANA_TEMPO_TENANT_ID=team-a                   # multi-tenant Tempo only
+```
 
 ### TypeScript
 
 ```ts
-import { TempoClient } from "@grow-codes/grafana-tempo";
+import { TempoClient, currentTraceId, initTracing, withSpan } from "@grow-codes/grafana-tempo";
 
+const tracing = initTracing({ serviceName: "checkout" });
 const client = TempoClient.fromEnv();
 try {
-  const health = await client.health();
-  console.log(health.healthy, health.status);
-  console.log("latency ms:", await client.ping());
+  console.log(await client.health()); // never throws for an unreachable service
+  const traceId = await withSpan("GET /orders", async () => currentTraceId());
+  await tracing.forceFlush();
+  const trace = await client.query.waitForTrace(traceId!, { timeoutMs: 15_000 });
+  console.log(trace.spans.map((s) => s.name));
 } finally {
+  await tracing.shutdown();
   await client.close();
 }
 ```
@@ -94,14 +106,23 @@ try {
 ### Rust
 
 ```rust
-use grow_grafana_tempo::TempoClient;
+use grow_grafana_tempo as sdk;
+use sdk::tracing::{current_trace_id, with_span, SpanOptions, TraceQueryClient, TracingConfig, WaitForTraceOptions};
 
 #[tokio::main]
-async fn main() -> Result<(), grow_grafana_tempo::Error> {
-    let client = TempoClient::from_env()?;
-    let health = client.health().await?;
-    println!("{} {}", health.healthy, health.status);
-    println!("latency: {:?}", client.ping().await?);
+async fn main() -> sdk::Result<()> {
+    let tracing = sdk::init_tracing(TracingConfig::new("checkout"))?;
+    let client = sdk::TempoClient::from_env()?;
+    println!("healthy: {}", client.health().await?.healthy);
+    let trace_id = with_span("GET /orders", SpanOptions::default(), async {
+        Ok::<_, std::io::Error>(current_trace_id().unwrap_or_default())
+    })
+    .await
+    .expect("span");
+    tracing.force_flush(None).await?;
+    let trace = client.query().wait_for_trace(&trace_id, WaitForTraceOptions::default()).await?;
+    println!("{} spans", trace.spans.len());
+    tracing.shutdown().await?;
     client.close().await;
     Ok(())
 }
@@ -110,97 +131,193 @@ async fn main() -> Result<(), grow_grafana_tempo::Error> {
 ### Go
 
 ```go
-package main
-
-import (
-	"context"
-	"fmt"
-	"log"
-
-	tempo "github.com/grow-codes-packages/grafana-tempo/go"
-)
-
-func main() {
-	ctx := context.Background()
-	client, err := tempo.NewClientFromEnv()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer client.Close()
-
-	health, err := client.Health(ctx)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(health.Healthy, health.Status)
+ctx := context.Background()
+handle, err := tempo.InitTracing(ctx, tempo.TracingConfig{ServiceName: "checkout"})
+if err != nil {
+	log.Fatal(err)
 }
+defer handle.Shutdown(context.Background())
+client, err := tempo.NewClientFromEnv()
+if err != nil {
+	log.Fatal(err)
+}
+defer client.Close()
+
+traceID, _ := tempo.WithSpan(ctx, "GET /orders", func(ctx context.Context) (string, error) {
+	id, _ := tempo.CurrentTraceID(ctx)
+	return id, nil
+})
+_ = handle.ForceFlush(ctx)
+trace, err := client.Query().WaitForTrace(ctx, traceID, tempo.WaitForTraceOptions{})
+if err != nil {
+	log.Fatal(err)
+}
+fmt.Println(len(trace.Spans), "spans")
 ```
+
+(`import tempo "github.com/grow-codes-packages/grafana-tempo/go"`)
 
 ### Python
 
 ```python
-from grow_grafana_tempo import TempoClient
+import grow_grafana_tempo as sdk
 
-with TempoClient.from_env() as client:
-    health = client.health()
-    print(health.healthy, health.status)
-    print("latency ms:", client.ping())
+handle = sdk.init_tracing(service_name="checkout")
+trace_id = sdk.with_span("GET /orders", lambda span: sdk.current_trace_id())
+handle.force_flush()
+
+with sdk.TempoClient.from_env() as client:
+    print(client.health())
+    trace = client.query.wait_for_trace(trace_id, timeout_s=15)
+    print([s.name for s in trace.spans])
+handle.shutdown()
 ```
 
-Async code uses `AsyncTempoClient` with the same methods (`async with`, `await client.health()`).
+Async code uses `AsyncTempoClient` with the same methods (`async with`, `await client.query.get_trace(…)`).
 
 ### Java
 
 ```java
-import codes.grow.packages.tempo.TempoClient;
+import codes.grow.packages.tempo.*;
+import codes.grow.packages.tempo.tracing.*;
+import codes.grow.packages.tempo.tracing.query.WaitForTraceOptions;
 
+TracingHandle tracing = TempoTracing.initTracing(TempoTracingConfig.builder("checkout").build());
 try (TempoClient client = TempoClient.fromEnv()) {
-    var health = client.health();
-    System.out.println(health.healthy() + " " + health.status());
-    System.out.println("latency ms: " + client.ping());
+  System.out.println(client.health());
+  String traceId = Spans.withSpan("GET /orders", () -> Spans.currentTraceId().orElseThrow());
+  tracing.forceFlush();
+  var trace = client.query().waitForTrace(traceId, WaitForTraceOptions.defaults());
+  System.out.println(trace.spans().size() + " spans");
+} finally {
+  tracing.shutdown();
 }
 ```
 
-More complete programs live in [examples/](examples/) — one folder per language.
+More complete programs (TraceQL search, tag values, metrics, hooks) live in [examples/](examples/) —
+one folder per language.
 
 ## Configuration
 
 All settings can be passed in code or through environment variables. Precedence: **explicit value >
-`GROW_GRAFANA_TEMPO_*` variable > vendor variable > default.** A present but invalid value raises a
-`ConfigError` that names the variable (never its value).
+`GROW_GRAFANA_TEMPO_*` > Tempo's own variables (`TEMPO_URL`, `TEMPO_TENANT_ID`) > short
+`GROW_TEMPO_*` aliases > default.** A present but invalid value raises a `ConfigError` that names
+the variable (never its value).
 
-| Setting | Environment variable | Default |
+**Query client** (`TempoConfig`, `TempoClient`):
+
+| Setting | Environment variables (precedence order) | Default |
 | - | - | - |
-| `url` | `GROW_GRAFANA_TEMPO_URL` | service default |
-| `token` | `GROW_GRAFANA_TEMPO_TOKEN` | none |
-| `connectTimeout` | `GROW_GRAFANA_TEMPO_CONNECT_TIMEOUT` | 10 s |
-| `requestTimeout` (per attempt) | `GROW_GRAFANA_TEMPO_REQUEST_TIMEOUT` | 30 s |
-| `totalTimeout` (including retries) | `GROW_GRAFANA_TEMPO_TOTAL_TIMEOUT` | 120 s |
-| `retry.maxRetries` | `GROW_GRAFANA_TEMPO_MAX_RETRIES` | 3 |
-| `tls.caCertPath` | `GROW_GRAFANA_TEMPO_CA_CERT` | system roots |
-| `tls.clientCertPath` / `tls.clientKeyPath` | `GROW_GRAFANA_TEMPO_CLIENT_CERT` / `GROW_GRAFANA_TEMPO_CLIENT_KEY` | none |
-| `tls.insecureSkipVerify` (tests only) | `GROW_GRAFANA_TEMPO_INSECURE_SKIP_VERIFY` | `false` |
-| `proxy` | `GROW_GRAFANA_TEMPO_PROXY` | none (environment proxies are ignored) |
+| `url` | `GROW_GRAFANA_TEMPO_URL`, `TEMPO_URL`, `GROW_TEMPO_URL` | `http://127.0.0.1:3200` |
+| `tenantId` (`X-Scope-OrgID`) | `GROW_GRAFANA_TEMPO_TENANT_ID`, `TEMPO_TENANT_ID`, `GROW_TEMPO_TENANT_ID` | none (single-tenant) |
+| `token` (bearer for an auth proxy) | `GROW_GRAFANA_TEMPO_TOKEN`, `GROW_TEMPO_TOKEN` | none |
+| `connectTimeout` | `GROW_GRAFANA_TEMPO_CONNECT_TIMEOUT`, `GROW_TEMPO_CONNECT_TIMEOUT` | 10 s |
+| `requestTimeout` (per attempt) | `GROW_GRAFANA_TEMPO_REQUEST_TIMEOUT`, `GROW_TEMPO_REQUEST_TIMEOUT` | 30 s |
+| `totalTimeout` (including retries) | `GROW_GRAFANA_TEMPO_TOTAL_TIMEOUT`, `GROW_TEMPO_TOTAL_TIMEOUT` | 120 s |
+| `retry.maxRetries` | `GROW_GRAFANA_TEMPO_MAX_RETRIES`, `GROW_TEMPO_MAX_RETRIES` | 3 |
+| `tls.caCertPath` | `GROW_GRAFANA_TEMPO_CA_CERT`, `GROW_TEMPO_CA_CERT` | system roots |
+| `tls.clientCertPath` / `tls.clientKeyPath` | `GROW_GRAFANA_TEMPO_CLIENT_CERT` / `_CLIENT_KEY`, `GROW_TEMPO_CLIENT_CERT` / `_CLIENT_KEY` | none |
+| `tls.insecureSkipVerify` (tests only) | `GROW_GRAFANA_TEMPO_INSECURE_SKIP_VERIFY`, `GROW_TEMPO_INSECURE_SKIP_VERIFY` | `false` |
+| `proxy` | `GROW_GRAFANA_TEMPO_PROXY`, `GROW_TEMPO_PROXY` | none (environment proxies are ignored) |
 | `headers`, `userAgentSuffix`, `hooks`, `logger` | — | none |
 
-Vendor variables that are also read: `OTEL_EXPORTER_OTLP_*`, `TEMPO_URL`, `TEMPO_TENANT_ID`, `GROW_GRAFANA_TEMPO_*`.
+Tempo has no authentication of its own. `token` (sent as `Authorization: Bearer …`) and `headers`
+exist for an authenticating reverse proxy in front of it; both are redacted everywhere.
+
+**Tracing** (`initTracing`, OTLP export):
+
+| Setting | Environment variables (precedence order) | Default |
+| - | - | - |
+| `endpoint` | `GROW_GRAFANA_TEMPO_OTLP_ENDPOINT`, `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT`, `OTEL_EXPORTER_OTLP_ENDPOINT` (+ `/v1/traces` for HTTP) | `http://127.0.0.1:4318` (`:4317` for gRPC) |
+| `protocol` | `GROW_GRAFANA_TEMPO_OTLP_PROTOCOL`, `OTEL_EXPORTER_OTLP_TRACES_PROTOCOL`, `OTEL_EXPORTER_OTLP_PROTOCOL` | `http/protobuf` (`grpc` selectable; `native` = OTLP/HTTP) |
+| `compression` | `GROW_GRAFANA_TEMPO_OTLP_COMPRESSION`, `OTEL_EXPORTER_OTLP_TRACES_COMPRESSION`, `OTEL_EXPORTER_OTLP_COMPRESSION` | `gzip` |
+| `headers` | `OTEL_EXPORTER_OTLP_TRACES_HEADERS`, `OTEL_EXPORTER_OTLP_HEADERS` (explicit headers win per key) | none |
+| tenant (`X-Scope-OrgID` header / `x-scope-orgid` metadata) | `GROW_GRAFANA_TEMPO_TENANT_ID`, `TEMPO_TENANT_ID`, `GROW_TEMPO_TENANT_ID` | none |
+| `serviceName` | `OTEL_SERVICE_NAME`, `service.name` in `OTEL_RESOURCE_ATTRIBUTES` | required |
+| `resourceAttributes` | `OTEL_RESOURCE_ATTRIBUTES` (explicit wins per key) | none |
+| `sampler` / `samplerRatio` | `OTEL_TRACES_SAMPLER` / `OTEL_TRACES_SAMPLER_ARG` | `parentbased_always_on` / 1.0 |
 
 Durations accept milliseconds (`1500`) or units (`500ms`, `10s`, `1m30s`); booleans accept
 `true/false/1/0/yes/no/on/off`. Field names follow each language's convention
 (`request_timeout` in Python and Rust, `RequestTimeout` in Go). The full reference is in the
-[documentation](https://grow-codes-packages.github.io/grafana-tempo/).
+[documentation](https://grow-codes-packages.github.io/grafana-tempo/functions/).
 
 ## Function overview
 
 <!-- service:function-overview — the service fills this section; keep the heading. -->
 
-The same functions exist in every language, named per language convention (`getString` in
-TypeScript and Java, `get_string` in Python and Rust, `GetString` in Go).
+The same functions exist in every language, named per language convention (`getTrace` in
+TypeScript and Java, `get_trace` in Python and Rust, `GetTrace` in Go). Every function is called
+against a real Tempo in the Docker suite unless [docs/compatibility.md](docs/compatibility.md)
+says otherwise. Full signatures and one example per language for every function:
+[Functions](https://grow-codes-packages.github.io/grafana-tempo/functions/).
 
-| Area | Functions | Description |
+### Client (`TempoClient`)
+
+| Function | Tempo endpoint | Description |
 | - | - | - |
-| Client | `health`, `ping`, `serverVersion`, `close` | liveness, authenticated round trip, server version, shutdown |
-| Tracing | `initTracing`, `withSpan`, `traced`, `inject`, `extract`, `getTrace`, `searchTraces`, `listServices`, `listOperations`, `getDependencies`, `waitForTrace` | OpenTelemetry setup and trace queries |
+| `health()` | `GET /ready` | `{healthy, status}`; never throws for an unhealthy or unreachable server |
+| `ping()` | `GET /api/v2/search/tags?scope=intrinsic` | tenant-aware round trip, returns the latency; missing tenant on a multi-tenant Tempo → `AuthenticationError` |
+| `serverVersion()` | `GET /api/status/buildinfo` (fallback `/status/version`) | `"3.1.1"` |
+| `buildInfo()`, `echo()`, `ready()` | `/api/status/buildinfo`, `/api/echo`, `/ready` | raw probes (also on the query client) |
+| `query` | — | the `TempoQueryClient` sharing this client's transport |
+| `close()` | — | idempotent; flushes and releases connections |
+
+| TypeScript | Rust | Go | Python | Java |
+| - | - | - | - | - |
+| `await client.serverVersion()` | `client.server_version().await?` | `client.ServerVersion(ctx)` | `client.server_version()` | `client.serverVersion()` |
+
+### Query (`TempoQueryClient`, implements `TraceQueryClient`)
+
+| Function | Tempo endpoint | Description |
+| - | - | - |
+| `getTrace(traceId, {start, end})` | `GET /api/v2/traces/{id}` (v1 fallback on a route 404) | normalized `Trace` (hex ids, sorted spans) or null/None/empty when missing |
+| `search({traceql, start, end, limit, spss})` | `GET /api/search` | TraceQL search with span sets and service stats; no `q` when no query is given |
+| `searchTraces({service, operation, tags, minDuration, maxDuration, start, end, limit})` | `GET /api/search` | SPEC search, rendered as one TraceQL span set (`trace:duration` bounds) → `TraceSummary[]` |
+| `searchTags({scope, query, start, end})` | `GET /api/v2/search/tags` | attribute names per scope |
+| `searchTagValues(tag, {query, start, end})` | `GET /api/v2/search/tag/{tag}/values` | typed values (`string`, `int`, `keyword`, …) |
+| `listServices()`, `listOperations(service)` | tag values of `resource.service.name` / `name` | names |
+| `traceQLMetrics(query, {start, end, since, step, exemplars})` | `GET /api/metrics/query_range` | TraceQL metrics series (zero samples filled in) |
+| `waitForTrace(traceId, {timeout, interval, minSpans})` | polls `getTrace` | test helper |
+| `getDependencies(range)` | — | always `UnsupportedError` (Tempo has no dependency endpoint) |
+
+| TypeScript | Rust | Go | Python | Java |
+| - | - | - | - | - |
+| `await client.query.getTrace(id)` | `client.query().get_trace(&id).await?` | `client.Query().GetTrace(ctx, id)` | `client.query.get_trace(id)` | `client.query().getTrace(id)` |
+
+### TraceQL builder (`TraceQL`)
+
+| Function | Description |
+| - | - |
+| `span(filters)`, `and(field, op, value)`, `or(…)` | span-set filter; values quoted and escaped (`\`, `"`, newline, tab, CR); odd attribute names quoted (`span."my key"`) |
+| `child`, `descendant`, `parent`, `ancestor`, `sibling`, `structural(op, other)` | structural operators `>`, `>>`, `<`, `<<`, `~` (also `&&`, `\|\|`) |
+| `select(fields…)` | `\| select(…)` |
+| `field(name)`, `quote(text)` | render one field / string literal |
+
+| Language | Example |
+| - | - |
+| TypeScript | `TraceQL.span({ "resource.service.name": "api" }).and("duration", ">", "200ms").select("span.http.status_code")` |
+| Rust | `TraceQL::span([("resource.service.name", "api")]).and("duration", ">", "200ms").select(["span.http.status_code"]).build()?` |
+| Go | `tempo.TraceQL.Span(map[string]any{"resource.service.name": "api"}).And("duration", ">", "200ms").Select("span.http.status_code").Build()` |
+| Python | `TraceQL.span({"resource.service.name": "api"}).and_("duration", ">", "200ms").select("span.http.status_code")` |
+| Java | `TraceQL.span(Map.of("resource.service.name", "api")).and("duration", ">", "200ms").select("span.http.status_code")` |
+
+All render `{ resource.service.name = "api" && span:duration > 200ms } | select(span.http.status_code)`.
+
+### Tracing setup and helpers
+
+| Function | Description |
+| - | - |
+| `initTracing(config)` | OpenTelemetry SDK with the Tempo OTLP preset (http/protobuf :4318 or gRPC :4317), tenant header, sampler, batch processor, propagators; returns `TracingHandle` (`tracer`, `forceFlush`, `shutdown`) |
+| `withTenant(config, tenant)` | adds `X-Scope-OrgID` to an exporter config (Go, Rust, Java; TS/Python take `tenantId`) |
+| `withSpan`, `traced`, `currentSpan`, `currentTraceId`, `currentSpanId`, `addEvent`, `recordException`, `setError` | span helpers |
+| `inject`, `extract`, `injectHeaders`, `extractHeaders` | W3C trace context + baggage propagation (B3 optional) |
+| `traceFields()` | `{trace_id, span_id}` for log correlation |
+| adapters | TS Express/Fastify/NestJS + `fetch`; Rust tower/axum layer, reqwest middleware, `tracing-opentelemetry`; Go `net/http` handler + `RoundTripper`, gRPC interceptors; Python ASGI/WSGI, httpx/requests hooks; Java Servlet filter, `HttpClient` and OkHttp interceptors |
+
+| TypeScript | Rust | Go | Python | Java |
+| - | - | - | - | - |
+| `initTracing({ serviceName: "api", tenantId: "team-a" })` | `init_tracing(with_tenant(TracingConfig::new("api"), "team-a"))?` | `tempo.InitTracing(ctx, tempo.WithTenant(tempo.TracingConfig{ServiceName: "api"}, "team-a"))` | `init_tracing(service_name="api", tenant_id="team-a")` | `TempoTracing.initTracing(TempoTracingConfig.builder("api").tenantId("team-a").build())` |
 
 <!-- /service:function-overview -->
 
@@ -225,10 +342,24 @@ stack is always removed afterwards (`docker compose down -v`). Unit tests need n
 | - | - | - | - | - | - |
 | Runtime | Node.js ≥ 22.12, ESM + CJS | stable, MSRV 1.85 | 1.26, 1.27 | 3.10 – 3.14 | 17, 21, 25 |
 | Async | `Promise` + `AbortSignal` | `async` (tokio), `blocking` feature | `context.Context` | sync + `asyncio` | sync + `CompletableFuture` |
-| Grafana Tempo | `grafana/tempo:3.1.1` | `grafana/tempo:3.1.1` | `grafana/tempo:3.1.1` | `grafana/tempo:3.1.1` | `grafana/tempo:3.1.1` |
+| OTLP/HTTP protobuf export | yes | yes | yes | yes | yes |
+| OTLP/gRPC export | yes | yes | yes | yes (`grpc` extra) | yes |
+| gRPC `insecureSkipVerify` | yes | `ConfigError` | yes | `ConfigError` | yes |
+| Grafana Tempo | `3.1.1` | `3.1.1` | `3.1.1` | `3.1.1` | `3.1.1` |
 
-Functions that Grafana Tempo (or its emulator) cannot serve are listed with the reason in
-[docs/compatibility.md](docs/compatibility.md).
+The Docker suite runs Tempo **3.1.1** built like the Grow Codes stack template (Alpine plus the
+official release binary; single-tenant and multi-tenant instances). Tempo-specific behaviour the SDK
+handles for you:
+
+- A trace miss on the v2 API is HTTP 200 with an empty body (`{"trace":{}}`); the SDK returns
+  null/None/empty, like a v1 404.
+- Search, tags and metrics see new spans about **30 s** after ingest; trace by id is immediate.
+- Export to a multi-tenant Tempo without a tenant fails with HTTP 503 / gRPC `Unavailable`
+  ("no org id"), which OpenTelemetry exporters retry and then drop. Always set the tenant there.
+- `getDependencies` is `UNSUPPORTED`: Tempo has no dependency-graph endpoint.
+
+Language and service differences, and the functions that are covered by unit tests only, are listed
+in [docs/compatibility.md](docs/compatibility.md).
 
 ## Contributing
 

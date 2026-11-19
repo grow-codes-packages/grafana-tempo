@@ -1,0 +1,18 @@
+{
+  "function": "search",
+  "case": "end-before-start-400",
+  "request": {
+    "method": "GET",
+    "path": "/api/search",
+    "query": {
+      "q": "{ resource.service.name = \"grow-sdk-verify-179503498127460-api\" }",
+      "start": "1795035067",
+      "end": "1795034947"
+    }
+  },
+  "response": {
+    "status": 400,
+    "contentType": "text/plain; charset=utf-8",
+    "body": "http parameter start must be before end. received start=1795035067 end=1795034947"
+  }
+}

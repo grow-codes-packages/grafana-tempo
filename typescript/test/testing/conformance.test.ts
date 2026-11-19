@@ -7,18 +7,14 @@ import {
   formatReport,
   runConformance,
 } from "../../src/testing/index.js";
-import { type MockServer, startServer } from "../helpers/server.js";
+import type { MockServer } from "../helpers/server.js";
+import { TEMPO_ROUTES, tempoServer } from "../support/tempo.js";
 
 const scenariosDir = fileURLToPath(new URL("../../../conformance/scenarios/", import.meta.url));
 let server: MockServer;
 
 beforeAll(async () => {
-  server = await startServer((req) => {
-    if (req.url === "/health") return { status: 200, body: { status: "ok" } };
-    if (req.url === "/version") return { status: 200, body: { version: "0.0.1" } };
-    if (req.url === "/v1/ping") return { status: 200, body: {} };
-    return { status: 404 };
-  });
+  server = await tempoServer(TEMPO_ROUTES);
 });
 
 afterAll(async () => {
@@ -30,13 +26,13 @@ function options(): ConformanceOptions {
     scenariosDir,
     categories: ["core"],
     factories: {
-      core: () => new TempoClient({ url: server.url, token: "conformance-token" }),
+      core: () => new TempoClient({ url: server.url }),
     },
     capabilities: { core: ["version"] },
   };
 }
 
-describe("conformance (core) against a local demo API", () => {
+describe("conformance (core) against recorded Tempo responses", () => {
   it("every core scenario passes", async () => {
     const report = await runConformance(options());
     expect(report.failed, formatReport(report)).toBe(0);

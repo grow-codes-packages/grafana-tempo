@@ -1,0 +1,18 @@
+{
+  "function": "otlpHttpJson",
+  "case": "ok",
+  "request": {
+    "method": "POST",
+    "path": "/v1/traces",
+    "body": {
+      "resourceSpans": "<4 spans, 2 resources>"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "partialSuccess": {}
+    }
+  }
+}

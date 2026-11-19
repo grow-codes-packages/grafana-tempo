@@ -1,0 +1,30 @@
+{
+  "function": "searchTags",
+  "case": "v2-scope-event",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/search/tags",
+    "query": {
+      "start": "1795034947",
+      "end": "1795035067",
+      "scope": "event"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "scopes": [
+        {
+          "name": "event",
+          "tags": [
+            "n"
+          ]
+        }
+      ],
+      "metrics": {
+        "inspectedBytes": "25793"
+      }
+    }
+  }
+}

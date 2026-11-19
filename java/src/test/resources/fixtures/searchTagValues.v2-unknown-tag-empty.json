@@ -1,0 +1,22 @@
+{
+  "function": "searchTagValues",
+  "case": "v2-unknown-tag-empty",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/search/tag/span.does.not.exist/values",
+    "query": {
+      "start": "1795034947",
+      "end": "1795035067"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "tagValues": [],
+      "metrics": {
+        "inspectedBytes": "26060"
+      }
+    }
+  }
+}

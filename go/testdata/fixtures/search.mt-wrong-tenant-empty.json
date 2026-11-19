@@ -1,0 +1,27 @@
+{
+  "function": "search",
+  "case": "mt-wrong-tenant-empty",
+  "request": {
+    "method": "GET",
+    "path": "/api/search",
+    "query": {
+      "q": "{ resource.service.name = \"grow-sdk-verify-179503498127460-mt\" }",
+      "start": "1795034947",
+      "end": "1795035067"
+    },
+    "headers": {
+      "X-Scope-OrgID": "tenant-b"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "traces": [],
+      "metrics": {
+        "completedJobs": 2,
+        "totalJobs": 2
+      }
+    }
+  }
+}

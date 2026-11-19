@@ -1,0 +1,35 @@
+{
+  "function": "search",
+  "case": "legacy-tags",
+  "request": {
+    "method": "GET",
+    "path": "/api/search",
+    "query": {
+      "tags": "service.name=grow-sdk-verify-179503498127460-api",
+      "minDuration": "100ms",
+      "start": "1795034947",
+      "end": "1795035067"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "traces": [
+        {
+          "traceID": "f74bc1b058a1a8b85f9ae0231e4001",
+          "rootServiceName": "grow-sdk-verify-179503498127460-api",
+          "rootTraceName": "GET /orders",
+          "startTimeUnixNano": "1795035005729668338",
+          "durationMs": 450
+        }
+      ],
+      "metrics": {
+        "inspectedTraces": 5,
+        "inspectedBytes": "28004",
+        "completedJobs": 2,
+        "totalJobs": 2
+      }
+    }
+  }
+}

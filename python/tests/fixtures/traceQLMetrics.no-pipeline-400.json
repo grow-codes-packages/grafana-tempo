@@ -1,0 +1,17 @@
+{
+  "function": "traceQLMetrics",
+  "case": "no-pipeline-400",
+  "request": {
+    "method": "GET",
+    "path": "/api/metrics/query_range",
+    "query": {
+      "q": "{ resource.service.name = \"grow-sdk-verify-179503498127460-api\" }",
+      "since": "5m"
+    }
+  },
+  "response": {
+    "status": 400,
+    "contentType": "text/plain; charset=utf-8",
+    "body": "not a metrics query"
+  }
+}

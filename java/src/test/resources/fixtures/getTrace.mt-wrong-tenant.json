@@ -1,0 +1,19 @@
+{
+  "function": "getTrace",
+  "case": "mt-wrong-tenant",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/traces/0af7651916cd43dd8448eb211c80319c",
+    "headers": {
+      "X-Scope-OrgID": "tenant-b"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "trace": {},
+      "metrics": {}
+    }
+  }
+}

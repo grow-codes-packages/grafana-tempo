@@ -1,0 +1,36 @@
+{
+  "function": "searchTags",
+  "case": "v2-scope-intrinsic",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/search/tags",
+    "query": {
+      "start": "1795034947",
+      "end": "1795035067",
+      "scope": "intrinsic"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "scopes": [
+        {
+          "name": "intrinsic",
+          "tags": [
+            "duration",
+            "event:name",
+            "event:timeSinceStart",
+            "instrumentation:name",
+            "instrumentation:version",
+            "kind",
+            "link:spanID",
+            "link:traceID",
+            "…trimmed 17 more"
+          ]
+        }
+      ],
+      "metrics": {}
+    }
+  }
+}

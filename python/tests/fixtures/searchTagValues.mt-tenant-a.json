@@ -1,0 +1,42 @@
+{
+  "function": "searchTagValues",
+  "case": "mt-tenant-a",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/search/tag/resource.service.name/values",
+    "query": {
+      "start": "1795034947",
+      "end": "1795035067"
+    },
+    "headers": {
+      "X-Scope-OrgID": "tenant-a"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "tagValues": [
+        {
+          "type": "string",
+          "value": "grow-sdk-seed-db"
+        },
+        {
+          "type": "string",
+          "value": "grow-sdk-tg-mtgrpc-179503498127460"
+        },
+        {
+          "type": "string",
+          "value": "grow-sdk-verify-179503498127460-mt"
+        },
+        {
+          "type": "string",
+          "value": "grow-sdk-seed-api"
+        }
+      ],
+      "metrics": {
+        "inspectedBytes": "26017"
+      }
+    }
+  }
+}

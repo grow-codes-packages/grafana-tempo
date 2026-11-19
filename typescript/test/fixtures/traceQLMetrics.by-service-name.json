@@ -1,0 +1,116 @@
+{
+  "function": "traceQLMetrics",
+  "case": "by-service-name",
+  "request": {
+    "method": "GET",
+    "path": "/api/metrics/query_range",
+    "query": {
+      "q": "{ resource.service.name =~ \"grow-sdk-verify-179503498127460-.*\" } | count_over_time() by (resource.service.name)",
+      "start": "1795034947",
+      "end": "1795035043",
+      "step": "5s"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "series": [
+        {
+          "labels": [
+            {
+              "key": "resource.service.name",
+              "value": {
+                "stringValue": "grow-sdk-verify-179503498127460-api"
+              }
+            }
+          ],
+          "samples": [
+            {
+              "timestampMs": "1795034945000"
+            },
+            {
+              "timestampMs": "1795034950000"
+            },
+            {
+              "timestampMs": "1795034955000"
+            },
+            {
+              "timestampMs": "1795034960000"
+            },
+            "…trimmed 10 more"
+          ],
+          "exemplars": [
+            {
+              "labels": [
+                {
+                  "key": "trace:id",
+                  "value": {
+                    "stringValue": "f74bc1b058a1a8b85f9ae0231e4001"
+                  }
+                },
+                {
+                  "key": "resource.service.name",
+                  "value": {
+                    "stringValue": "grow-sdk-verify-179503498127460-api"
+                  }
+                }
+              ],
+              "value": 4,
+              "timestampMs": "1795035005729"
+            },
+            {
+              "labels": [
+                {
+                  "key": "trace:id",
+                  "value": {
+                    "stringValue": "e9b7d20a606bce1c1c3f347ef020c799"
+                  }
+                },
+                {
+                  "key": "resource.service.name",
+                  "value": {
+                    "stringValue": "grow-sdk-verify-179503498127460-api"
+                  }
+                }
+              ],
+              "value": 4,
+              "timestampMs": "1795035006729"
+            }
+          ]
+        },
+        {
+          "labels": [
+            {
+              "key": "resource.service.name",
+              "value": {
+                "stringValue": "grow-sdk-verify-179503498127460-db"
+              }
+            }
+          ],
+          "samples": [
+            {
+              "timestampMs": "1795034945000"
+            },
+            {
+              "timestampMs": "1795034950000"
+            },
+            {
+              "timestampMs": "1795034955000"
+            },
+            {
+              "timestampMs": "1795034960000"
+            },
+            "…trimmed 10 more"
+          ]
+        }
+      ],
+      "metrics": {
+        "inspectedBytes": "27015",
+        "completedJobs": 1,
+        "totalJobs": 1
+      },
+      "step": "5000000000"
+    }
+  }
+}

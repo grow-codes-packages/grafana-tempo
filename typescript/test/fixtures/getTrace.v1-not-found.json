@@ -1,0 +1,13 @@
+{
+  "function": "getTrace",
+  "case": "v1-not-found",
+  "request": {
+    "method": "GET",
+    "path": "/api/traces/00000000000000000000000000000001"
+  },
+  "response": {
+    "status": 404,
+    "contentType": "",
+    "body": ""
+  }
+}

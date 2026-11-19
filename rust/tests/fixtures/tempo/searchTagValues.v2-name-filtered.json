@@ -1,0 +1,40 @@
+{
+  "function": "searchTagValues",
+  "case": "v2-name-filtered",
+  "request": {
+    "method": "GET",
+    "path": "/api/v2/search/tag/name/values",
+    "query": {
+      "q": "{ resource.service.name = \"grow-sdk-verify-179503498127460-api\" }",
+      "start": "1795034947",
+      "end": "1795035067"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "tagValues": [
+        {
+          "type": "string",
+          "value": "GET /health"
+        },
+        {
+          "type": "string",
+          "value": "GET /orders"
+        },
+        {
+          "type": "string",
+          "value": "load order"
+        },
+        {
+          "type": "string",
+          "value": "render"
+        }
+      ],
+      "metrics": {
+        "inspectedBytes": "26347"
+      }
+    }
+  }
+}
