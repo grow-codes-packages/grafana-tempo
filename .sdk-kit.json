@@ -82,7 +82,7 @@
     },
     {
       "path": ".github/workflows/release.yml",
-      "sha256": "7374f1fa837ff2ec2d8dad412b97c2bb47a5a96d691c5483061627f8c8c5342d",
+      "sha256": "9ce4ac6eea51b82a6357df6cb6cce88a9f36e5dd655da90fd3d22012eaa7e98e",
       "generated": true
     },
     {
@@ -92,7 +92,7 @@
     },
     {
       "path": ".release-please-manifest.json",
-      "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+      "sha256": "8bb8eecb8fb9f763e2a20886e5ed9cc77e6c8f2ead86f3ef0291e54d9ae75250",
       "generated": false
     },
     {
@@ -676,7 +676,7 @@
     },
     {
       "path": "java/Makefile",
-      "sha256": "d2fb41a5f1c29b8356fc49f388956c5db627d3f15c670baf80a529f71b95c9ff",
+      "sha256": "d448db907344b3fdc1cbffa8f34c75d55f48c3ff599bf88029bb355a2d80380d",
       "generated": false
     },
     {
@@ -711,7 +711,7 @@
     },
     {
       "path": "java/pom.xml",
-      "sha256": "c8e8b7073016e01636f77920be41ce4dc2b20bf28bb2a74c693923514332a84b",
+      "sha256": "ae63b4a9ba8930b87bfaf44556a2c661b667fe37fe5c46494b2955aa07404d9c",
       "generated": true
     },
     {
@@ -1196,7 +1196,7 @@
     },
     {
       "path": "python/Makefile",
-      "sha256": "96eee533c6bed81bd5972387b5189d2eef62e3c3cf09d7f161f890e376f284a1",
+      "sha256": "d87705a5c21dfeac6d991e5738162adcf0aeda0db57394b207cbd91647db1530",
       "generated": false
     },
     {
@@ -1346,7 +1346,7 @@
     },
     {
       "path": "python/src/grow_grafana_tempo/_version.py",
-      "sha256": "326553d84c140a43dd807c7e7ffd9a77a0b48f004b8de216cf29e7959ca2ed0e",
+      "sha256": "a77fa54f51fdf50ebdb72c3a3172a1bc4dbc18af2125c9b46a337b7947d33a8e",
       "generated": false
     },
     {
@@ -1801,7 +1801,7 @@
     },
     {
       "path": "typescript/Makefile",
-      "sha256": "0f6a79ff9f891acb7ecd8133a1851bf52c730ab78d39acec6177f9694faee073",
+      "sha256": "62917d9a3037fe723f0e7a52f968b60a434099479dbcc3923aaba2edcdbb8c9a",
       "generated": false
     },
     {
@@ -2066,7 +2066,7 @@
     },
     {
       "path": "typescript/test/core/transport.test.ts",
-      "sha256": "f73c48acc898ed7454e71f7b9b5b80b6e8b939aa36187ea9bc207bfdba1209dc",
+      "sha256": "291cac38396db364457373c6faa51d93d50620bb0d17d02eff4e7735c83b6230",
       "generated": false
     },
     {
@@ -2131,7 +2131,7 @@
     },
     {
       "path": "typescript/tsup.config.ts",
-      "sha256": "9a086b7b970de220f1604f52c2ecd1b5a9ee66d053fff28a5b734d50f43dfd2a",
+      "sha256": "22da20e1e6d1362ee67803b6529c36b903587d5489d63d207207963653b6bdc0",
       "generated": false
     },
     {
