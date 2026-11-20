@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/grow-codes-packages/grafana-tempo/compare/typescript-v0.1.1...typescript-v0.2.0) (2026-11-20)
+
+
+### Features
+
+* sync grafana-tempo to sdk-kit 0.4.0 (foundation API) ([#14](https://github.com/grow-codes-packages/grafana-tempo/issues/14)) ([9af86bb](https://github.com/grow-codes-packages/grafana-tempo/commit/9af86bba611cce26cea4eabfb655917f57d67a67))
+
 ## [0.1.1](https://github.com/grow-codes-packages/grafana-tempo/compare/typescript-v0.1.0...typescript-v0.1.1) (2026-11-19)
 
 
