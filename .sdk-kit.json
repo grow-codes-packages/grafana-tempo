@@ -445,6 +445,11 @@
       "generated": false
     },
     {
+      "path": "go/AGENTS.md",
+      "sha256": "977c574d27fcc43dcedf1c673196b3f5449a1d17adb70330f7ffbe0e0fbc4570",
+      "generated": true
+    },
+    {
       "path": "go/Makefile",
       "sha256": "28ee38286021cc9f1cfdfdc3c430a307f46e7f5374283ed594d62d583e990923",
       "generated": true
@@ -507,6 +512,11 @@
     {
       "path": "go/core_hooks.go",
       "sha256": "6b69dd35d9fa8d6d3034f2636d7477f3da99491c7203e6b5668ba6313b067ae9",
+      "generated": true
+    },
+    {
+      "path": "go/core_key.go",
+      "sha256": "987c72192f2edc5af62574bb46a2cda4228e8f9d590ff6bc6a39879b4d354722",
       "generated": true
     },
     {
@@ -681,7 +691,7 @@
     },
     {
       "path": "go/version.go",
-      "sha256": "5a9632a4d8585f538625b72388fffd0f591a5228eca2595f518d4cb1d39d3cd1",
+      "sha256": "9995191253651136e4c14080fe7c8dda0bc94c8dfd10701f82ef39d486394344",
       "generated": false
     },
     {
@@ -1120,6 +1130,11 @@
       "generated": true
     },
     {
+      "path": "java/src/main/resources/META-INF/grow/grafana-tempo/AGENTS.md",
+      "sha256": "a794f14cca5915dcf94958fa138d26171d84dd82dc4a54fbbdbae5e3f0c0736d",
+      "generated": true
+    },
+    {
       "path": "java/src/main/resources/codes/grow/packages/tempo/core/sdk.properties",
       "sha256": "a856f5024f3f898cebded80da874b64876de47f129b582e1a1a321f9eab7d3d7",
       "generated": true
@@ -1270,13 +1285,18 @@
       "generated": false
     },
     {
+      "path": "python/src/grow_grafana_tempo/AGENTS.md",
+      "sha256": "e172675e2afa04065aa9b3ac9ca6833162337a80fe3d8e95228f28d2290c9136",
+      "generated": true
+    },
+    {
       "path": "python/src/grow_grafana_tempo/__init__.py",
       "sha256": "be2df9687f68b812583a707e922a2802763a665454b0496b79cf49e7ffaa05e0",
       "generated": false
     },
     {
       "path": "python/src/grow_grafana_tempo/_core/__init__.py",
-      "sha256": "9fc0056fd974fb4e46a5b55edc3277ba149f40dfdd026090a133cdbb87f993aa",
+      "sha256": "38309fe4baff4198716f3dc28b318375f8fa718c4c7b6a7a4308fc58009397cd",
       "generated": true
     },
     {
@@ -1331,7 +1351,7 @@
     },
     {
       "path": "python/src/grow_grafana_tempo/_core/useragent.py",
-      "sha256": "0112109759bdfecf3a225a4387897d9f48a8c7e3f2979f072d3d4b9704a0f680",
+      "sha256": "1f7a7339654c1d51367cfebcb625cee5af9e7f0751d48ecfcab4c14fcd56c8b7",
       "generated": true
     },
     {
@@ -1371,7 +1391,7 @@
     },
     {
       "path": "python/src/grow_grafana_tempo/_version.py",
-      "sha256": "a77fa54f51fdf50ebdb72c3a3172a1bc4dbc18af2125c9b46a337b7947d33a8e",
+      "sha256": "7d1c20542e22e5d3055dc6738c8960fc7438ab08ab86dcca8738bc380e42f206",
       "generated": false
     },
     {
@@ -1503,6 +1523,11 @@
       "path": "rust/.gitignore",
       "sha256": "44e19e795df0e74663b0affde31f9aec4e08ec88787e680b404381b33134987a",
       "generated": false
+    },
+    {
+      "path": "rust/AGENTS.md",
+      "sha256": "6ed5a2a9a41391f96a8ccc023399ea13b240c4c7d630ccf5c530244bfc21a392",
+      "generated": true
     },
     {
       "path": "rust/Cargo.toml",
@@ -1825,6 +1850,11 @@
       "generated": false
     },
     {
+      "path": "typescript/AGENTS.md",
+      "sha256": "40cb2b5ea28bbf5af734b60a3092d3b0b529ce063bbbe8c2cee214d4b72f74ff",
+      "generated": true
+    },
+    {
       "path": "typescript/Makefile",
       "sha256": "6dff08576b2083a1163fd0444ab62be8e09c935da135768da84b5cc68ccb9c7e",
       "generated": false
@@ -1946,7 +1976,7 @@
     },
     {
       "path": "typescript/src/core/version.ts",
-      "sha256": "1069b2e299047337a7dca02cc9f52e2691841ee48ea2f1f2f0e69248caf7e575",
+      "sha256": "d6308f0842f7819a887425eadc781a9c21ea5ad3277e136ee0d90e4892801fbd",
       "generated": true
     },
     {
